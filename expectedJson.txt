@@ -1,0 +1,46 @@
+# 메인화면
+/home
+- home.html
+# key생성
+- /start
+# 게임 진행
+GET /playing/{key}/{sequene}
+- playing.html
+# 결과 화면
+GET /ending/{key}/{sequence}
+- ending.html
+# 공유 화면
+GET /story/{key}/{sequence}
+- story.html
+# howto 화면
+- howto.html
+# 결과 시작 화면
+GET /ending/{key}
+- playing-end.html
+# 결과 공유 화면
+GET /ending/{key}/11
+- ending-real.html
+# 공유 화면 마지막
+GET /story/{key}/11
+- story-end.html
+GET /play/{key}/{sequence}
+{
+"sentence": "당신은 사막에 도착했습니다. 사막에는 거대한 <span id="word">____</span>(이)가 춤을 추고 있네요."
+}
+POST /play/{key}/{sequence}
+{
+"predicion" : [{label: "pliers", confidence: 0.07999389618635178}],
+"coordinate" : [[81.11627197265625, 153.44189453125, 81.11627197265625, 153.44189453125]]
+}
+# 게임 결과
+GET /end/{key}/{sequence}
+{
+"answer" : {"label": "pliers", "confidence": 7},
+"coordinate" : [[81.11627197265625, 153.44189453125, 81.11627197265625, 153.44189453125]]
+}
+# 게임 결과 공유
+GET /tale/{key}/{sequence}
+{
+"candiate" : ["사과", "파인애플", "배"],
+"coordinate" : [[81.11627197265625, 153.44189453125, 81.11627197265625, 153.44189453125]]
+}
