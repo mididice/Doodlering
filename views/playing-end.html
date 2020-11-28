@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="description" content="make setence with doodling">
+    <meta name="keywords" content="midiDice sketch-rnn 두들링 ">
+    <meta name="author" content="midiDice">
+
+    <title>doodlering</title> 
+    <script src="lib/jquery.min.js"></script>
+        <style>
+             html,
+body {
+    width: 360px;
+    height:auto!important;
+    min-height:100vh;
+    background-color: #2a2c2e;
+    margin:0;
+    overflow: hidden;
+}
+.container {
+width: 100%;
+padding-right: 0px;
+padding-left: 0px;
+margin-right: auto;
+margin-left: auto;
+}
+.background_image{
+  position: relative;
+}
+.bttn_gamestart_howto{
+    position: absolute;
+    bottom:13.5%;
+    left: 10%;
+}
+.ui_popup{
+    position: absolute;
+    left: 10%;
+    top: 2%;
+}
+.ui_result_start{
+  position: absolute;
+    border-radius: 3%;
+}
+.ui_bottom{
+  position:absolute;
+  bottom: 0;
+  width: 100%;
+  height: 14%;
+  border-radius: 8% 9% 0 0;
+  background-color: #000000;
+}
+.rectangle_main{
+    width: 83%;
+    height: 572px;
+    margin: 0 16px 0 0;
+    border-radius: 20px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    border: solid 4px #cfd2d6;
+    background-color: #111111;
+    position: absolute;
+    top: 7%;
+    left: 8%;
+}
+.bttn_off_next{
+  float: right;
+  margin: 5% 8% 5% 8%;
+}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+                <picture>
+                        <img
+                          src="/img/ui_bg.png"
+                          alt="background image"
+                          style="object-fit: cover;"
+                          class="background_image"
+                          loading="lazy"
+                        />
+                      </picture>
+            <div class="rectangle_main">
+                    <picture>
+                            <img src="/img/ui_resultstart.jpg"
+                            alt="play result"
+                            class="ui_result_start"
+                            style="object-fit: cover;"
+                            loading="lazy"
+                            />
+                        </picture>
+            </div>
+            <div class="ui_bottom">
+                    <picture>
+                            <img
+                              src="/img/bttn_off_next/2.svg"
+                              alt="next button"
+                              style="object-fit: cover;"
+                              class="bttn_off_next"
+                              loading="lazy"
+                            />
+                          </picture>
+            </div>        
+            </div>
+        </div>
+    </body>
+    <script>
+    $('.bttn_gamestart_howto').click(function(){
+        location.href="/play.html"
+    });
+    </script>
+</html>

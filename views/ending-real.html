@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="description" content="make setence with doodling">
+    <meta name="keywords" content="midiDice sketch-rnn 두들링 ">
+    <meta name="author" content="midiDice">
+
+    <title>doodlering</title> 
+    <script src="lib/jquery.min.js"></script>
+        <style>
+             html,
+body {
+    width: 360px;
+    height:auto!important;
+    min-height:100vh;
+    background-color: #2a2c2e;
+    margin:0;
+    overflow: hidden;
+}
+.container {
+width: 100%;
+padding-right: 0px;
+padding-left: 0px;
+margin-right: auto;
+margin-left: auto;
+}
+.background_image{
+  position: relative;
+}
+.bttn_gamestart_howto{
+    position: absolute;
+    bottom:13.5%;
+    left: 10%;
+}
+.ui_popup{
+    position: absolute;
+    left: 10%;
+    top: 2%;
+}
+.ui_result_start{
+  position: absolute;
+    left: 10%;
+    top: 2%;
+    border-radius: 5%;
+}
+.rectangle_main{
+    width: 83%;
+    height: 572px;
+    margin: 0 16px 0 0;
+    border-radius: 20px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    border: solid 4px #cfd2d6;
+    background-color: #111111;
+    position: absolute;
+    top: 7%;
+    left: 8%;
+}
+.real_ending_title{
+  padding: 10%;
+    width: 243px;
+    margin-top: 15%;
+    opacity: 0.9;
+    font-family: NanumSquareOTF;
+    font-size: 20px;
+    font-weight: 300;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -0.8px;
+    text-align: left;
+    color: #ffffff;
+}
+.real_ending_title_emphasis{
+  font-weight: 800;
+}
+.ui_url{
+  object-fit: cover;
+    border-radius: 12%;
+    margin: 8% 8% 5% 8%;
+}
+.real_ending_center{
+  position: absolute;
+  top: 50%;
+  
+  font-family: NanumSquareOTF;
+  font-size: 14px;
+  font-weight: 800;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.56px;
+  text-align: center;
+  color: #ffffff;
+}
+.real_ending_center > a{
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: -0.48px;
+}
+.real_ending_center > a:link{
+  color:#ffffff;
+}
+.bttn_copy{
+  position: absolute;
+    top: 63%;
+    left: 39%;
+}
+.real_ending_share{
+  text-align: center;
+}
+.real_ending_share_btn{
+  margin-left:1%;
+}
+.bttn_retry{
+  position: absolute;
+  bottom: 0;
+}
+.ui_bottom{
+  position:absolute;
+  bottom: 0;
+  width: 100%;
+  height: 14%;
+  border-radius: 8% 9% 0 0;
+  background-color: #000000;
+}
+        </style>
+    </head>
+    <body>
+        <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v9.0" nonce="afhlg77x"></script>
+        <div class="container">
+            <picture>
+                <img
+                  src="/img/ui_bg.png"
+                  alt="background image"
+                  style="object-fit: cover;"
+                  class="background_image"
+                  loading="lazy"
+                />
+              </picture>
+              <div class="rectangle_main">
+                  <div class="real_ending_title">
+                    <span class="real_ending_title_emphasis">
+                        원하는 대로 완성되었나요?
+                    </span>
+                      친구에게 공유하고<br>
+                      얼마나 내용을 잘 해석했는지
+                      확인해보세요.
+                    </div>
+                    <picture>
+                        <img
+                          src="/img/ui_url.jpg"
+                          alt="ui_url_background"
+                          style="object-fit: cover;"
+                          class="ui_url"
+                          loading="lazy"
+                        />
+                    </picture>
+                    <div class="real_ending_center">
+                        제가 그린 그림 이야기입니다.<br>
+                        그림을 보고 내용을 한번 맞혀보세요.
+                        <a href="https://mididice.works/doodlering/sdfaf" class="real_ending_center_link">
+                          https://mididice.works/doodlering/start
+                        </a>
+                        <input type="hidden" id="shareLink" value="https://mididice.works/doodlering/start">
+                    </div>
+                    <picture>
+                        <img
+                          src="/img/bttn_copy.svg"
+                          alt="button copy"
+                          style="object-fit: cover;"
+                          class="bttn_copy"
+                          loading="lazy"
+                          onMouseDown="copyLink()"
+                        />
+                    </picture>
+                    <div class="real_ending_share">
+                        <a id="create-kakao-link-btn" class="real_ending_share_btn" href="javascript:;">
+                          <img
+                              src="/img/social_kakao.svg"
+                            />
+                        </a>
+                        <a class="real_ending_share_btn" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:8080/&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
+                          <img
+                            src="/img/social_facebook.svg"
+                          />
+                        </a>
+                        <a class="real_ending_share_btn" href="https://twitter.com/intent/tweet?text=doodlering&url=http://localhost:8080" target="_blank">
+                          <img
+                          src="/img/social_twitter.svg"
+                        />
+                        </a>   
+                    </div>
+                    <picture>
+                      <a href="/start.html">
+                        <img
+                          src="/img/bttn_retry.svg"
+                          alt="button retry"
+                          style="object-fit: cover;"
+                          class="bttn_retry"
+                          loading="lazy"
+                        />
+                    </a>
+                    </picture>
+                </div>
+              </div>      
+            </div>
+            <div class="ui_bottom">
+              
+            </div>
+        </div>
+    </body>
+    <script>
+      function copyLink(){
+        var copyText = document.getElementById("shareLink");
+        document.execCommand("copy");
+      }
+    $('.bttn_gamestart_howto').click(function(){
+        location.href="/play.html"
+    });
+  </script>
+        <script src="/lib/kakao.min.js"></script>
+        <script type="text/javascript">
+        Kakao.init("cf67686fdea922cf740c5d71821bd9a1")
+          Kakao.Link.createScrapButton({
+            container: '#create-kakao-link-btn',
+            requestUrl: 'http://localhost:8080/story/1',
+          })
+        </script>
+    </script>
+</html>

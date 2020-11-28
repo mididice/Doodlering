@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="description" content="make setence with doodling">
+    <meta name="keywords" content="midiDice sketch-rnn 두들링 ">
+    <meta name="author" content="midiDice">
+
+    <title>doodlering</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
+    <script src="/lib/jquery.min.js"></script>
+    <script src="/lib/p5.min.js"></script>
+    <script src="/lib/p5.dom.min.js"></script>
+  
+    <script src="/lib/ml5.min.js" type="text/javascript"></script>
+    <script src="/app/ml5.classification.hangeul.js" type="text/javascript"></script>
+   
+       <style>
+           html,
+body {
+  width: 360vh;
+  height:auto!important;
+    min-height:100vh;
+    background-color: #2a2c2e;
+    margin:0;
+    overflow: hidden;
+}
+canvas{
+  border-radius: 5%;
+}
+.container {
+width: 100%;
+padding-right: 0px;
+padding-left: 0px;
+margin-right: auto;
+margin-left: auto;
+}
+.Rectangle-17 {
+  width: 300px;
+  /* height: 572px; */
+  margin: 0 16px 0 0;
+  border-radius: 20px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  border: solid 4px #cfd2d6;
+  background-color: #111111;
+}
+.Rectangle-23 {
+  width: 50px;
+  height: 47px;
+  background-color: #c8fc50;
+  background: linear-gradient(to top left, #fff 0%, #fff 50%, #a48d01 50%, #c8fc50 100%);
+}
+.sentence{
+  width: 83%;
+  margin: 8% 8% 5% 8%;
+  opacity: 0.9;
+  font-family: NanumSquareOTF;
+  font-size: 20px;
+  font-weight: 800;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.8px;
+  text-align: left;
+  color: #ffffff;
+}
+.text .text-style-1 {
+  font-weight: 300;
+}
+.text .text-style-2 {
+  color: #ef91a4;
+}
+.text .text-style-3 {
+  color: #c7f74f;
+}.introduce {
+  width: 100%;
+  margin-left: 8%;
+  opacity: 0.4;
+  font-family: NanumSquareOTF;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.48px;
+  text-align: left;
+  color: #ffffff;
+}
+.Rectangle-19 {
+  width: 100%;
+  /* height: 355px; */
+  position: absolute;
+    bottom: 0;
+  border-radius: 5%;
+  background-color: #3644eb;
+}
+.Rectangle-26 {
+  width: 91px;
+  height: 26px;
+  padding: 6px 10px;
+  border-radius: 32px;
+  border: solid 1px #ffffff;
+}
+.Rectangle-24 {
+  width: 360px;
+  height: 108px;
+  
+  box-shadow: 0 -4px 4px 0 rgba(0, 0, 0, 0.25);
+  background-color: #111111;
+}
+.Star-3 {
+  width: 54px;
+  height: 54px;
+  /* margin: 0 0 0 192px; */
+  float:left;
+  padding: 17.9px 12px 3.5px 15.6px;
+  transform: rotate(180deg);
+  background-color: #2a2c2e;
+}
+.redraw {
+  width: 56px;
+  height: 14px;
+  margin: 0 0 0 4px;
+  font-family: NanumSquareOTF;
+  font-size: 12px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.48px;
+  text-align: left;
+  color: #ffffff;
+}
+.level {
+  width: 28px;
+  height: 14px;
+  font-family: Bungee;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #111111;
+}
+.Rectangle-18 {
+  width: 14px;
+  height: 522px;
+  margin: 24px 0 26px 16px;
+  padding: 193px 0 0;
+  border-radius: 20px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  border: solid 4px #cfd2d6;
+  background-color: #111111;
+}
+.Rectangle-25 {
+  width: 151px;
+  height: 50px;
+  /* margin: 2px 20px 2px 21px; */
+  float: left;
+  padding: 12px 44px 12px 43px;
+  border-radius: 32px;
+  box-shadow: 0 -2.9px 2.9px 0 rgba(0, 0, 0, 0.25);
+  background-color: #c8fc50;
+}
+.DONE {
+  width: 64px;
+  height: 26px;
+  font-family: Bungee;
+  font-size: 22px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #111111;
+}
+.Slice-1 {
+  /* width: 360px;
+  height: 112px; */
+  position: fixed;
+  bottom: 0;
+  padding: 4px 0 0;
+  object-fit: contain;
+}
+.rectangle_main{
+    width: 83%;
+    height: 572px;
+    margin: 0 16px 0 0;
+    border-radius: 20px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    border: solid 4px #cfd2d6;
+    background-color: #111111;
+    position: absolute;
+    top: 7%;
+    left: 8%;
+}
+.ui_bottom{
+  position:absolute;
+  bottom: 0;
+  width: 100%;
+  height: 14%;
+  border-radius: 8% 9% 0 0;
+  background-color: #000000;
+}
+.background_image{
+  position: relative;
+}
+.badge{
+  margin-left: 8%;
+}
+.bttn_redraw{
+  position: absolute;
+    bottom: 43%;
+    right: 5%;
+}
+.bttn_off_next{
+  float: right;
+  margin: 5% 8% 5% 8%;
+}
+.bttn_off_back{
+  float: left;
+  margin: 5% 8% 5% 8%;
+}
+       </style>
+        
+    </head>
+    <body>
+        <div class="container">
+            <picture>
+                <img
+                  src="/img/ui_bg.png"
+                  alt="background image"
+                  style="object-fit: cover;"
+                  class="background_image"
+                  loading="lazy"
+                />
+              </picture>
+            <div class="rectangle_main">
+                <picture>
+                    <img
+                      src="/img/badge/1.svg"
+                      alt="step 01"
+                      style="object-fit: cover;"
+                      class="badge"
+                      loading="lazy"
+                    />
+                  </picture>
+                <div class="sentence">당신은 사막에 도착했습니다.
+                        사막에는 거대한 <span id="word">_____</span>(이)가
+                        춤을 추고 있네요.</div>
+                <div class="introduce">빈 칸에 들어갈 내용을 그려주세요.</div>
+                <div class="Rectangle-19" id="drawingPaper">
+                </div>
+                <picture>
+                    <img
+                      src="/img/bttn_redraw.svg"
+                      alt="redraw button"
+                      style="object-fit: cover;"
+                      class="bttn_redraw"
+                      loading="lazy"
+                    />
+                  </picture>
+            </div>
+            <div class="ui_bottom">
+                <picture>
+                    <img
+                      src="/img/bttn_off_back/1.svg"
+                      alt="next button"
+                      style="object-fit: cover;"
+                      class="bttn_off_back"
+                      loading="lazy"
+                    />
+                  </picture>
+                <picture>
+                    <img
+                      src="/img/bttn_off_next/2.svg"
+                      alt="next button"
+                      style="object-fit: cover;"
+                      class="bttn_off_next"
+                      loading="lazy"
+                    />
+                  </picture>
+            </div>
+    </div>
+        <script src="/app/sketch_doodle.js"></script>
+    </body>
+</html>
