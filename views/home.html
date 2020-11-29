@@ -1,162 +1,161 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="description" content="make setence with doodling">
-    <meta name="keywords" content="midiDice sketch-rnn 두들링 ">
-    <meta name="author" content="midiDice">
 
-    <title>doodlering</title>
-    <script src="lib/jquery.min.js"></script>
-        <style>
-             html,
-body {
-    width: 360px;
-    height:auto!important;
-    min-height:100vh;
-    background-color: #2a2c2e;
-    margin:0;
-    overflow: hidden;
-}
-.container {
-width: 100%;
-padding-right: 0px;
-padding-left: 0px;
-margin-right: auto;
-margin-left: auto;
-}
-        ._texture-1 {
-  width: 360px;
-  /* height: 760px; */
-  padding: 120px 0 0;
-  /* opacity: 0.12; */
-        }
-        .DOODLERING {
-            float: left;
-  width: 30px;
-  height: 200px;
-  /* margin: 6.7px 62.3px 1.8px 0; */
-  transform: rotate(90deg);
-  font-family: Bungee;
-  font-size: 40.4px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: center;
-  color: #ffffff;
-}
-.MIDIDICE-X-ART-CENTER-NABI {
-    float: left;
-    width: 120px;
-    height: 50px;
-  transform: rotate(90deg);
-  opacity: 0.4;
-  background-color: #ffffff;
-}
-.Vector_1 {
-    position : absolute;
-    top: 0;
-    left: 0;
-  width: 358.1px;
-  height: 415.2px;
-  margin: 0 0px 15.5px 0;
-  padding: 2.1px 30px 26.2px 28.1px;
-  object-fit: contain;
-  transform: rotate(12deg);
-  border: solid 76.5px #2a2c2e;
-}
-.Vector_1_2 {
-    position : absolute;
-    top: 0;
-    left: 0;
-  width: 358.1px;
-  height: 415.2px;
-  margin: 0 0px 15.5px 0;
-  padding: 2.1px 30px 26.2px 28.1px;
-  object-fit: contain;
-  transform: rotate(12deg);
-  border: solid 76.5px #2a2c2e;
-}
-        .BG {
-            float: left;
-  width: 360px;
-  height: 407px;
-  /* padding: 28px 23px 301.9px 0px; */
-  background-image: linear-gradient(to top, rgba(0, 0, 0, 0), #000000);
-}
-        .bttn_gamestart {
-          position: absolute;
-    bottom: 22%;
-    left: 10%;
-}
-.bttn_howtoplay {
-  position: absolute;
-    bottom:13.5%;
-    left: 10%;
-}
-.mididiceworks {
-  width: 79px;
-  height: 14px;
-  margin: 73px 21.4px 0 0.2px;
-  opacity: 0.24;
-  font-family: NanumSquareOTF;
-  font-size: 12px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: -0.48px;
-  text-align: left;
-  color: #ffffff;
-}
-.background_image{
-  position: relative;
-}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <picture>
-                <img
-                  src="/img/start_gametitle.png"
-                  alt="start game title"
-                  style="object-fit: cover;"
-                  class="background_image"
-                  loading="lazy"
-                />
-              </picture>
-              <picture>
-                  <img
-                    src="/img/bttn_gamestart.png"
-                    alt="game start"
-                    style="object-fit: cover;"
-                    class="bttn_gamestart"
-                    loading="lazy"
-                  />
-                </picture>
-                <picture>
-                  <a href="/howto.html">
-                    <img
-                      src="/img/bttn_howtoplay.png"
-                      alt="game start"
-                      style="object-fit: cover;"
-                      class="bttn_howtoplay"
-                      loading="lazy"
-                    />
-                  </a>
-                </picture>            
-            </div>
-        </div>
-    </body>
-    <script>
-    $('.bttn_gamestart').click(function(){
-      location.href="/play.html"
-    });
-    </script>
+<head>
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="description" content="make setence with doodling">
+  <meta name="keywords" content="midiDice sketch-rnn 두들링 ">
+  <meta name="author" content="midiDice">
+
+  <title>doodlering</title>
+  <script src="/static/lib/jquery.min.js"></script>
+  <style>
+    html,
+    body {
+      width: 360px;
+      height: auto !important;
+      min-height: 100vh;
+      background-color: #2a2c2e;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100%;
+      padding-right: 0px;
+      padding-left: 0px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    ._texture-1 {
+      width: 360px;
+      /* height: 760px; */
+      padding: 120px 0 0;
+      /* opacity: 0.12; */
+    }
+
+    .DOODLERING {
+      float: left;
+      width: 30px;
+      height: 200px;
+      /* margin: 6.7px 62.3px 1.8px 0; */
+      transform: rotate(90deg);
+      font-family: Bungee;
+      font-size: 40.4px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .MIDIDICE-X-ART-CENTER-NABI {
+      float: left;
+      width: 120px;
+      height: 50px;
+      transform: rotate(90deg);
+      opacity: 0.4;
+      background-color: #ffffff;
+    }
+
+    .Vector_1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 358.1px;
+      height: 415.2px;
+      margin: 0 0px 15.5px 0;
+      padding: 2.1px 30px 26.2px 28.1px;
+      object-fit: contain;
+      transform: rotate(12deg);
+      border: solid 76.5px #2a2c2e;
+    }
+
+    .Vector_1_2 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 358.1px;
+      height: 415.2px;
+      margin: 0 0px 15.5px 0;
+      padding: 2.1px 30px 26.2px 28.1px;
+      object-fit: contain;
+      transform: rotate(12deg);
+      border: solid 76.5px #2a2c2e;
+    }
+
+    .BG {
+      float: left;
+      width: 360px;
+      height: 407px;
+      /* padding: 28px 23px 301.9px 0px; */
+      background-image: linear-gradient(to top, rgba(0, 0, 0, 0), #000000);
+    }
+
+    .bttn_gamestart {
+      position: absolute;
+      bottom: 22%;
+      left: 10%;
+    }
+
+    .bttn_howtoplay {
+      position: absolute;
+      bottom: 13.5%;
+      left: 10%;
+    }
+
+    .mididiceworks {
+      width: 79px;
+      height: 14px;
+      margin: 73px 21.4px 0 0.2px;
+      opacity: 0.24;
+      font-family: NanumSquareOTF;
+      font-size: 12px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: -0.48px;
+      text-align: left;
+      color: #ffffff;
+    }
+
+    .background_image {
+      position: relative;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <picture>
+      <img src="/static/img/start_gametitle.png" alt="start game title" style="object-fit: cover;"
+        class="background_image" loading="lazy" />
+    </picture>
+    <picture>
+      <img src="/static/img/bttn_gamestart.png" alt="game start" style="object-fit: cover;" class="bttn_gamestart"
+        loading="lazy" />
+    </picture>
+    <picture>
+      <a href="/howto.html">
+        <img src="/static/img/bttn_howtoplay.png" alt="game start" style="object-fit: cover;" class="bttn_howtoplay"
+          loading="lazy" />
+      </a>
+    </picture>
+  </div>
+  </div>
+</body>
+<script>
+  $('.bttn_gamestart').click(function () {
+    location.href = "/play.html"
+  });
+</script>
+
 </html>

@@ -113,21 +113,58 @@ function setPossibleDraw(){
 }
 
 $('.bttn_off_next').click(function(){
-  var predictionList = [];
-  var prediction = {label: "pliers", confidence: 0.07999389618635178};
-  predictionList.push(prediction);
-  var coordinates = [];
-  var data = {"prediction":predictionList, "coordinate": coordinates};
-  
+  var key = getKey();
+  var sequence = getSequence();
+  location.href="/story/"+key+"/"+sequence;
+});
+
+var getKey = function(){
+  var pathName = window.location.pathname;
+  var pathNameList = pathName.split("/");
+  return pathNameList[2];
+}
+var getSequence = function(){
+  var pathName = window.location.pathname;
+  var pathNameList = pathName.split("/");
+  return pathNameList[2];
+}
+$(function() {
+  var key = getKey();
+  var sequence = getSequence();
   $.ajax({
-    type: 'POST',
-    url: '/play/{key}/{sequence}',
-    dataType: 'json',
-    contentType:'application/json; charset=utf-8',
-    data: JSON.stringify(data)
-  }).done(function() {
-      location.href="/play/{key}/{sequence}"
+    type: 'GET',
+    url: '/play/'+key+'/'+sequence,
+    dataType: 'text/html'
+  }).done(function(data) {
+    $('.sentence').html(data);
   }).fail(function (error) {
       alert(error);
   });
+
+  $.ajax({
+    type: 'GET',
+    url: '/tale/' + key + '/' + sequence,
+    dataType: 'json'
+  }).done(function (data) {
+    if(data.answer){
+      var label = data.answer[0].label;
+      for(var i=0; i<data.answer.length;i++){
+        $('.answer'+i).text(hanguel.get(data.answer[i]));
+      }
+      var confidence = data.answer.confidence;
+      $('#confidence').html("");
+    }
+    if(data.coordinate){
+      for(var i =0 ; i<data.coordinate.length;i++){
+        startingStrokes.push(data.coordinate[i])
+      }
+    }
+  }).fail(function (error) {
+    alert(error);
+  });
+});
+
+$(document).on(".button_assume", "click", function(){
+  var label = $(this).text();
+  $('#answer').label();
 });
