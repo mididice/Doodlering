@@ -158,4 +158,6 @@ $(function() {
   }).fail(function (error) {
       alert(error);
   });
+
+  $(".badge").attr("src","/static/badge/"+key+".svg");
 });
