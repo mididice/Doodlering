@@ -21,13 +21,8 @@ GET /ending/{key}
 GET /ending/{key}/11
 - ending-real.html
 # 공유 화면 마지막
-
-GET /story/{key}/11
+GET /story/{key}/end
 - story-end.html
-GET /play/{key}/{sequence} → html 로 줄수있는지 확인부탁
-{
-"sentence": "당신은 사막에 도착했습니다. 사막에는 거대한 <span id="word">____</span>(이)가 춤을 추고 있네요."
-}
 POST /play/{key}/{sequence}
 {
 "prediction" : [{label: "pliers", confidence: 0.07999389618635178}],
@@ -39,6 +34,11 @@ GET /end/{key}/{sequence}
 "answer" : {"label": "pliers", "confidence": 7},
 "coordinate" : [[81.11627197265625, 153.44189453125, 81.11627197265625, 153.44189453125]]
 }
+GET /play/{key}/{sequence} → html 로 줄수있는지 확인부탁
+{
+"sentence": "당신은 사막에 도착했습니다. 사막에는 거대한 <span id="word">____</span>(이)가 춤을 추고 있네요."
+}
+
 # 게임 결과 공유
 GET /tale/{key}/{sequence}
 {
