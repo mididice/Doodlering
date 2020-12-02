@@ -4,22 +4,22 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema schema
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `schema` ;
-USE `schema` ;
+CREATE SCHEMA IF NOT EXISTS `doodlering` ;
+USE `doodlering` ;
 
 -- -----------------------------------------------------
--- Table `schema`.`Games`
+-- Table `doodlering`.`Games`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `schema`.`Games` (
+CREATE TABLE IF NOT EXISTS `doodlering`.`Games` (
   `key` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`key`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `schema`.`Play`
+-- Table `doodlering`.`Play`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `schema`.`Play` (
+CREATE TABLE IF NOT EXISTS `doodlering`.`Play` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `Games_key` VARCHAR(255) NOT NULL,
   `sequence` VARCHAR(255) NOT NULL,
@@ -28,37 +28,37 @@ CREATE TABLE IF NOT EXISTS `schema`.`Play` (
   INDEX `fk_Play_Games1_idx` (`Games_key` ASC),
   CONSTRAINT `fk_Play_Games1`
     FOREIGN KEY (`Games_key`)
-    REFERENCES `schema`.`Games` (`key`)
+    REFERENCES `doodlering`.`Games` (`key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `schema`.`Words`
+-- Table `doodlering`.`Words`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `schema`.`Words` (
+CREATE TABLE IF NOT EXISTS `doodlering`.`Words` (
   `word` VARCHAR(255) NOT NULL,
   `Play_id` INT NOT NULL,
   `Play_Games_key` VARCHAR(255) NOT NULL,
   CONSTRAINT `fk_Words_Play1`
     FOREIGN KEY (`Play_id` , `Play_Games_key`)
-    REFERENCES `schema`.`Play` (`id` , `Games_key`)
+    REFERENCES `doodlering`.`Play` (`id` , `Games_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `schema`.`Coordinate`
+-- Table `doodlering`.`Coordinate`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `schema`.`Coordinate` (
+CREATE TABLE IF NOT EXISTS `doodlering`.`Coordinate` (
   `coordinate` VARCHAR(255) NOT NULL,
   `Play_id` INT NOT NULL,
   `Play_Games_key` VARCHAR(255) NOT NULL,
   CONSTRAINT `fk_Coordinate_Play1`
     FOREIGN KEY (`Play_id` , `Play_Games_key`)
-    REFERENCES `schema`.`Play` (`id` , `Games_key`)
+    REFERENCES `doodlering`.`Play` (`id` , `Games_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
