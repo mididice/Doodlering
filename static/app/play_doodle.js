@@ -21,10 +21,6 @@ let confidence;
 
 let possibleDraw = true;
 
-let firstClicked = false;
-
-let strokes = [];
-
 let current_raw_line = [];
 
 let prediction = [];
@@ -55,6 +51,8 @@ function setup() {
 
 function clearCanvas() {
   background('#3644eb');
+  current_raw_line = [];
+  prediction = [];
   window.document.getElementById('word').textContent = '___';
 }
 
@@ -68,7 +66,6 @@ stroke(255);
 if (mouseIsPressed) {
   line(pmouseX, pmouseY, mouseX, mouseY);
   current_raw_line.push([pmouseX, pmouseY, mouseX, mouseY]);
-  
 }
   
 }
@@ -84,11 +81,9 @@ function gotResult(error, results) {
     console.error(error);
   }
   // The results are in an array ordered by confidence.
-  console.log(results);
   prediction = results;
   // Show the first label and confidence
   window.document.getElementById('word').textContent = hanguel.get(results[0].label);
-  console.log(`Confidence: ${nf(results[0].confidence, 0, 2)}`); // Round the confidence to 0.01
 }
 
 var init = function() {
@@ -115,12 +110,8 @@ function setPossibleDraw(){
 $('.bttn_off_next').click(function(){
   var key = getKey();
   var sequence = getSequence();
-  var predictionList = [];
-  var prediction = {label: "pliers", confidence: 0.07999389618635178};
-  predictionList.push(prediction);
-  var coordinates = [];
-  var data = {"prediction":predictionList, "coordinate": coordinates};
-  if(predictionList.length){
+  var data = {"prediction":prediction, "coordinate": current_raw_line};
+  if(prediction.length<1){
     return;
   }
   $.ajax({
@@ -130,7 +121,7 @@ $('.bttn_off_next').click(function(){
     contentType:'application/json; charset=utf-8',
     data: JSON.stringify(data)
   }).done(function() {
-      location.href="/play/{key}/{sequence}"
+      location.href="/play/"+key+"/"+(sequence+1)
   }).fail(function (error) {
       alert(error);
   });
@@ -144,7 +135,7 @@ var getKey = function(){
 var getSequence = function(){
   var pathName = window.location.pathname;
   var pathNameList = pathName.split("/");
-  return pathNameList[2];
+  return pathNameList[3];
 }
 $(function() {
   var key = getKey();
@@ -159,5 +150,5 @@ $(function() {
       alert(error);
   });
 
-  $(".badge").attr("src","/static/badge/"+key+".svg");
+  $(".badge").attr("src","/static/img/badge/"+sequence+".svg");
 });

@@ -144,7 +144,7 @@
         loading="lazy" />
     </picture>
     <picture>
-      <a href="/howto.html">
+      <a href="/howto">
         <img src="/static/img/bttn_howtoplay.png" alt="game start" style="object-fit: cover;" class="bttn_howtoplay"
           loading="lazy" />
       </a>
@@ -154,7 +154,17 @@
 </body>
 <script>
   $('.bttn_gamestart').click(function () {
-    location.href = "/play.html"
+    $.ajax({
+      type: 'GET',
+      url: '/start',
+      dataType: 'json'
+    }).done(function(data) {
+      if(data.key){
+        location.href="/playing/"+data.key+"/1";
+      }
+    }).fail(function (error) {
+        alert(error);
+    });
   });
 </script>
 
