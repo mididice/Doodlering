@@ -1,11 +1,10 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
 	"sort"
-
+	"database/sql"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -15,22 +14,30 @@ import (
 var DB *sql.DB
 
 func main() {
+	fmt.Println("start")
 	var err error
-	DB, err = sql.Open("mysql", "root:1q2w3e4r5T!@@tcp(localhost:3306)/Doodlering")
-
+	DB, err = sql.Open("mysql", "root:1q2w3e4r5T!@@tcp(localhost:3306)/DOODLERING")
+	
 	if err != nil {
 		fmt.Println("fail to open db")
 		return
 	}
+
+	defer DB.Close()
+
 	var key string
-	result, err := DB.Query("SELECT * FROM Doodlering.Games;")
+	result, err := DB.Query("SELECT * FROM DOODLERING.Games;")
+
 	if err != nil {
+		fmt.Println("fail to get Games")
 		return
 	}
 	for result.Next() {
 		err = result.Scan(&key)
 		fmt.Println(key)
 	}
+	fmt.Println("start2")
+
 	r := gin.Default()
 	r.HTMLRender = ginview.Default()
 	r.GET("/start", getStart)
@@ -73,7 +80,7 @@ func getStart(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"key": uuid,
 	})
-	DB.Exec("INSERT INTO `Doodlering`.`Games` (`key`) VALUES ('" + uuid.String() + "');")
+	DB.Exec("INSERT INTO `DOODLERING`.`Games` (`key`) VALUES ('" + uuid.String() + "');")
 }
 func getPlayingks(c *gin.Context) {
 	c.Header("Content-Type", "text/html")
@@ -106,14 +113,14 @@ func postPlayks(c *gin.Context) {
 		})
 		return
 	}
-	DB.Exec("INSERT INTO `Doodlering`.`Play` (`Games_key`, `sequence`) " +
+	DB.Exec("INSERT INTO `DOODLERING`.`Play` (`Games_key`, `sequence`) " +
 		"VALUES ('" + key + "', '" + sequence + "');")
 	var id string
-	DB.QueryRow("SELECT id FROM Doodlering.Play " +
+	DB.QueryRow("SELECT id FROM DOODLERING.Play " +
 		"where Games_key = '" + key + "'AND sequence = '" + sequence + "';").Scan(&id)
 	var query = ""
 	for i, _ := range input.Coordinate {
-		query = " INSERT INTO `Doodlering`.`Coordinate` (`Play_id`, `Play_Games_key`, `x`, `y`, `dx`, `dy`) VALUES ('" + id + "', '" + key + "', '" + input.Coordinate[i][0] + "', '" + input.Coordinate[i][1] +
+		query = " INSERT INTO `DOODLERING`.`Coordinate` (`Play_id`, `Play_Games_key`, `x`, `y`, `dx`, `dy`) VALUES ('" + id + "', '" + key + "', '" + input.Coordinate[i][0] + "', '" + input.Coordinate[i][1] +
 			"', '" + input.Coordinate[i][2] + "', '" + input.Coordinate[i][3] + "');"
 		DB.Exec(query)
 	}
@@ -129,7 +136,7 @@ func getPlayks(c *gin.Context) {
 	sequence := c.Param("sequence")
 
 	var sentence string
-	DB.QueryRow("SELECT sentence FROM Doodlering.Sentences WHERE id =`" + sequence + "`;").Scan(&sentence)
+	DB.QueryRow("SELECT sentence FROM DOODLERING.Sentences WHERE id =`" + sequence + "`;").Scan(&sentence)
 	c.JSON(200, Sentences{
 		Sentence: sentence,
 	})
@@ -144,10 +151,10 @@ func taleks(c *gin.Context) {
 	key := c.Param("key")
 	sequence := c.Param("sequence")
 	var id string
-	DB.QueryRow("SELECT id FROM Doodlering.Play " +
+	DB.QueryRow("SELECT id FROM DOODLERING.Play " +
 		"where Games_key = '" + key + "'AND sequence = '" + sequence + "';").Scan(&id)
 
-	query := "SELECT label, confidence FROM Doodlering.Words " +
+	query := "SELECT label, confidence FROM DOODLERING.Words " +
 		"where Play_id = " + id + " AND Play_Games_key = '" + key + "';"
 	rows, err := DB.Query(query)
 	if err != nil {
@@ -173,7 +180,7 @@ func taleks(c *gin.Context) {
 	}
 	tale.Candidate = tmp
 
-	query = "SELECT x, y, dx, dy FROM Doodlering.Coordinate " +
+	query = "SELECT x, y, dx, dy FROM DOODLERING.Coordinate " +
 		"WHERE Play_Games_key = '" + key + "' AND Play_id = " + id + ";"
 	rows, err = DB.Query(query)
 	var x, y, dx, dy string
@@ -191,12 +198,12 @@ func getEndks(c *gin.Context) {
 	key := c.Param("key")
 	sequence := c.Param("sequence")
 	var id string
-	DB.QueryRow("SELECT id FROM Doodlering.Play " +
+	DB.QueryRow("SELECT id FROM DOODLERING.Play " +
 		"where Games_key = '" + key + "'AND sequence = '" + sequence + "';").Scan(&id)
 	var output End
 	fmt.Println("id:" + id)
 	var query string
-	query = "SELECT label, confidence FROM Doodlering.Words " +
+	query = "SELECT label, confidence FROM DOODLERING.Words " +
 		"where Play_id = " + id + " AND Play_Games_key = '" + key + "';"
 	rows, err := DB.Query(query)
 	if err != nil {
@@ -215,7 +222,7 @@ func getEndks(c *gin.Context) {
 		answers = append(answers, &row)
 	}
 	output.Answer = answers
-	query = "SELECT x, y, dx, dy FROM Doodlering.Coordinate " +
+	query = "SELECT x, y, dx, dy FROM DOODLERING.Coordinate " +
 		"WHERE Play_Games_key = '" + key + "' AND Play_id = " + id + ";"
 	rows, err = DB.Query(query)
 	var x, y, dx, dy string
