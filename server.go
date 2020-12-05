@@ -1,10 +1,11 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 	"sort"
-	"database/sql"
+
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -17,7 +18,7 @@ func main() {
 	fmt.Println("start")
 	var err error
 	DB, err = sql.Open("mysql", "root:1q2w3e4r5T!@@tcp(localhost:3306)/DOODLERING")
-	
+
 	if err != nil {
 		fmt.Println("fail to open db")
 		return
@@ -88,16 +89,16 @@ func getPlayingks(c *gin.Context) {
 }
 
 type Game struct {
-	Prediction []*Play    `json: "prediction"`
-	Coordinate [][]string `json: "coordinate"`
+	Prediction []*Play     `json: "prediction"`
+	Coordinate [][]float64 `json: "coordinate"`
 }
 type Play struct {
 	Label      string  `json : "label"`
 	Confidence float64 `json : "confidence"`
 }
 type End struct {
-	Coordinate [][]string `json: "coordinate"`
-	Answer     []*Play    `json: "answer"`
+	Coordinate [][]float64 `json: "coordinate"`
+	Answer     []*Play     `json: "answer"`
 }
 type Sentences struct {
 	Sentence string `json: "sentence"`
@@ -120,8 +121,8 @@ func postPlayks(c *gin.Context) {
 		"where Games_key = '" + key + "'AND sequence = '" + sequence + "';").Scan(&id)
 	var query = ""
 	for i, _ := range input.Coordinate {
-		query = " INSERT INTO `DOODLERING`.`Coordinate` (`Play_id`, `Play_Games_key`, `x`, `y`, `dx`, `dy`) VALUES ('" + id + "', '" + key + "', '" + input.Coordinate[i][0] + "', '" + input.Coordinate[i][1] +
-			"', '" + input.Coordinate[i][2] + "', '" + input.Coordinate[i][3] + "');"
+		query = " INSERT INTO `DOODLERING`.`Coordinate` (`Play_id`, `Play_Games_key`, `x`, `y`, `dx`, `dy`) VALUES ('" + id + "', '" + key + "', '" + fmt.Sprintf("%f", input.Coordinate[i][0]) + "', '" + fmt.Sprintf("%f", input.Coordinate[i][1]) +
+			"', '" + fmt.Sprintf("%f", input.Coordinate[i][2]) + "', '" + fmt.Sprintf("%f", input.Coordinate[i][3]) + "');"
 		DB.Exec(query)
 	}
 	for i, _ := range input.Prediction {
@@ -143,8 +144,8 @@ func getPlayks(c *gin.Context) {
 }
 
 type Tale struct {
-	Candidate  []string   `json:"candidate"`
-	Coordinate [][]string `json:"coordinate"`
+	Candidate  []string    `json:"candidate"`
+	Coordinate [][]float64 `json:"coordinate"`
 }
 
 func taleks(c *gin.Context) {
@@ -183,11 +184,11 @@ func taleks(c *gin.Context) {
 	query = "SELECT x, y, dx, dy FROM DOODLERING.Coordinate " +
 		"WHERE Play_Games_key = '" + key + "' AND Play_id = " + id + ";"
 	rows, err = DB.Query(query)
-	var x, y, dx, dy string
-	var cordiOutput [][]string
+	var x, y, dx, dy float64
+	var cordiOutput [][]float64
 	for rows.Next() {
 		rows.Scan(&x, &y, &dx, &dy)
-		var tmp []string
+		var tmp []float64
 		tmp = append(tmp, x, y, dx, dy)
 		cordiOutput = append(cordiOutput, tmp)
 	}
@@ -225,11 +226,11 @@ func getEndks(c *gin.Context) {
 	query = "SELECT x, y, dx, dy FROM DOODLERING.Coordinate " +
 		"WHERE Play_Games_key = '" + key + "' AND Play_id = " + id + ";"
 	rows, err = DB.Query(query)
-	var x, y, dx, dy string
-	var cordiOutput [][]string
+	var x, y, dx, dy float64
+	var cordiOutput [][]float64
 	for rows.Next() {
 		rows.Scan(&x, &y, &dx, &dy)
-		var tmp []string
+		var tmp []float64
 		tmp = append(tmp, x, y, dx, dy)
 		cordiOutput = append(cordiOutput, tmp)
 	}
