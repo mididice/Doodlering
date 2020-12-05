@@ -85,8 +85,8 @@ type Game struct {
 	Coordinate [][]string `json: "coordinate"`
 }
 type Play struct {
-	Label      string `json : "label"`
-	Confidence string `json : "confidence"`
+	Label      string  `json : "label"`
+	Confidence float64 `json : "confidence"`
 }
 type End struct {
 	Coordinate [][]string `json: "coordinate"`
@@ -119,7 +119,7 @@ func postPlayks(c *gin.Context) {
 	}
 	for i, _ := range input.Prediction {
 		query = "INSERT INTO `Doodlering`.`Words` (`label`, `Play_id`, `Play_Games_key`, `confidence`)" +
-			"VALUES ('" + input.Prediction[i].Label + "', '" + id + "', '" + key + "', '" + input.Prediction[i].Confidence + "');"
+			"VALUES ('" + input.Prediction[i].Label + "', '" + id + "', '" + key + "', '" + fmt.Sprintf("%f", input.Prediction[i].Confidence) + "');"
 		DB.Exec(query)
 	}
 }
@@ -154,7 +154,8 @@ func taleks(c *gin.Context) {
 		return
 	}
 	var words []Play
-	var label, confidence string
+	var label string
+	var confidence float64
 	for rows.Next() {
 		rows.Scan(&label, &confidence)
 		words = append(words, Play{Label: label, Confidence: confidence})
@@ -202,7 +203,8 @@ func getEndks(c *gin.Context) {
 		fmt.Println("fail to fetch")
 		return
 	}
-	var label, confidence string
+	var label string
+	var confidence float64
 	var answers []*Play
 	for rows.Next() {
 		rows.Scan(&label, &confidence)
