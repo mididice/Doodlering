@@ -24,22 +24,8 @@ func main() {
 		return
 	}
 
-	defer DB.Close()
-
-	var key string
-	result, err := DB.Query("SELECT * FROM DOODLERING.Games;")
-
-	if err != nil {
-		fmt.Println("fail to get Games")
-		return
-	}
-	for result.Next() {
-		err = result.Scan(&key)
-		fmt.Println(key)
-	}
-	fmt.Println("start2")
-
 	r := gin.Default()
+	r.Static("/static", "./static")
 	r.HTMLRender = ginview.Default()
 	r.GET("/start", getStart)
 	r.GET("/playing/:key/:sequence", getPlayingks)
