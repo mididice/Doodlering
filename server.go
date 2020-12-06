@@ -25,8 +25,8 @@ func main() {
 	}
 
 	r := gin.Default()
-	r.Static("/static", "./static")
 	r.HTMLRender = ginview.Default()
+	r.Static("/static", "./static")
 	r.GET("/start", getStart)
 	r.GET("/playing/:key/:sequence", getPlayingks)
 	r.POST("/play/:key/:sequence", postPlayks)
@@ -39,15 +39,37 @@ func main() {
 	r.GET("/end/:key/:sequence", getEndks)
 	r.GET("/tale/:key/:sequence", taleks)
 	r.GET("/play/:key/:sequence", getPlayks)
+	r.GET("/", redirectHome)
 	r.Run(":8080")
+}
+func redirectHome(c *gin.Context) {
+	c.Redirect(http.StatusMovedPermanently, "/home")
+}
+func endingkEnd(c *gin.Context) {
+	c.Header("Content-Type", "text/html")
+	c.HTML(http.StatusOK, "ending-real.html", gin.H{})
 }
 func getStoryke(c *gin.Context) {
 	c.Header("Content-Type", "text/html")
 	c.HTML(http.StatusOK, "story-end.html", gin.H{})
 }
 func getEndingks(c *gin.Context) {
-	c.Header("Content-Type", "text/html")
-	c.HTML(http.StatusOK, "ending.html", gin.H{})
+	if c.Param("sequence") == "end" {
+		c.Header("Content-Type", "text/html")
+		c.HTML(http.StatusOK, "ending-real.html", gin.H{})
+	} else {
+		c.Header("Content-Type", "text/html")
+		c.HTML(http.StatusOK, "ending.html", gin.H{})
+	}
+}
+func getStoryks(c *gin.Context) {
+	if c.Param("sequence") == "end" {
+		c.Header("Content-Type", "text/html")
+		c.HTML(http.StatusOK, "story-end.html", gin.H{})
+	} else {
+		c.Header("Content-Type", "text/html")
+		c.HTML(http.StatusOK, "story.html", gin.H{})
+	}
 }
 func getEndingk(c *gin.Context) {
 	c.Header("Content-Type", "text/html")
@@ -222,10 +244,6 @@ func getEndks(c *gin.Context) {
 	}
 	output.Coordinate = cordiOutput
 	c.JSON(200, output)
-}
-func getStoryks(c *gin.Context) {
-	c.Header("Content-Type", "text/html")
-	c.HTML(http.StatusOK, "story.html", gin.H{})
 }
 func getEndk(c *gin.Context) {
 	c.Header("Content-Type", "text/html")
