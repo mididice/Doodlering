@@ -47,7 +47,16 @@ function draw() {
   }
 
 }
-
+var getKey = function(){
+  var pathName = window.location.pathname;
+  var pathNameList = pathName.split("/");
+  return pathNameList[2];
+}
+var getSequence = function(){
+  var pathName = window.location.pathname;
+  var pathNameList = pathName.split("/");
+  return pathNameList[3];
+}
 $(function () {
   var key = getKey();
   var sequence = getSequence();
@@ -60,6 +69,7 @@ $(function () {
   }).fail(function (error) {
     alert(error);
   });
+  $(".badge").attr("src","/static/img/badge/"+sequence+".svg");
 
   $.ajax({
     type: 'GET',

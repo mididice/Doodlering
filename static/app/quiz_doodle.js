@@ -126,7 +126,7 @@ var getKey = function(){
 var getSequence = function(){
   var pathName = window.location.pathname;
   var pathNameList = pathName.split("/");
-  return pathNameList[2];
+  return pathNameList[3];
 }
 $(function() {
   var key = getKey();
@@ -140,6 +140,7 @@ $(function() {
   }).fail(function (error) {
       alert(error);
   });
+  $(".badge").attr("src","/static/img/badge/"+sequence+".svg");
 
   $.ajax({
     type: 'GET',
@@ -167,4 +168,7 @@ $(function() {
 $(document).on(".button_assume", "click", function(){
   var label = $(this).text();
   $('#answer').label();
+});
+$('.bttn_off_next').click(function(){
+  location.href="/story/"+getKey()+"/"+getSequence();
 });

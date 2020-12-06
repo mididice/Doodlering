@@ -121,7 +121,10 @@ $('.bttn_off_next').click(function(){
     contentType:'application/json; charset=utf-8',
     data: JSON.stringify(data)
   }).done(function() {
-      location.href="/play/"+key+"/"+(sequence+1)
+    if(sequence>=10){
+      location.href="/ending/"+key
+    }
+    location.href="/playing/"+key+"/"+(sequence+1)
   }).fail(function (error) {
       alert(error);
   });
