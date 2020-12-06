@@ -11,15 +11,39 @@ var getSequence = function () {
 }
 $(function () {
 
-    //playing-end
-    $('.bttn_gamestart_howto').click(function () {
-        location.href = "home.html";
-    });
-
     //ending-real, story-end
     var copyLink = function () {
         var copyText = document.getElementById("shareLink");
         document.execCommand("copy");
     }
 
+    $('.bttn_gamestart').click(function () {
+        $.ajax({
+            type: 'GET',
+            url: '/start',
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.key) {
+                location.href = "/playing/" + data.key + "/1";
+            }
+        }).fail(function (error) {
+            alert(error);
+        });
+    });
+    $('.bttn_gamestart_howto').click(function () {
+        $.ajax({
+            type: 'GET',
+            url: '/start',
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.key) {
+                location.href = "/playing/" + data.key + "/1";
+            }
+        }).fail(function (error) {
+            alert(error);
+        });
+    });
+    $('.ending_first').click(function(){
+        location.href="/ending/"+getKey()+"/1";
+    });
 });

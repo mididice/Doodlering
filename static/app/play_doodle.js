@@ -117,16 +117,17 @@ $('.bttn_off_next').click(function(){
   $.ajax({
     type: 'POST',
     url: '/play/'+key+'/'+sequence,
-    dataType: 'json',
+    dataType: 'text',
     contentType:'application/json; charset=utf-8',
     data: JSON.stringify(data)
-  }).done(function() {
+  }).done(function(data) {
     if(sequence>=10){
       location.href="/ending/"+key
+    }else{
+      location.href="/playing/"+key+"/"+(parseInt(sequence)+1);
     }
-    location.href="/playing/"+key+"/"+(sequence+1)
   }).fail(function (error) {
-      alert(error);
+    console.log(error);
   });
 });
 
@@ -146,9 +147,11 @@ $(function() {
   $.ajax({
     type: 'GET',
     url: '/play/'+key+'/'+sequence,
-    dataType: 'text/html'
+    dataType: 'json'
   }).done(function(data) {
-    $('.sentence').html(data);
+    if(data){
+      $('.sentence').html(data.sentence);
+    }
   }).fail(function (error) {
       alert(error);
   });

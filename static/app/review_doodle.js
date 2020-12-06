@@ -15,11 +15,6 @@ let startingStrokes = [];
 
 let startingStrokeIndex = 0;
 
-function preload() {
-  // Load the DoodleNet Image Classification model
-  classifier = ml5.imageClassifier('DoodleNet');
-}
-
 function setup() {
   // Create a canvas with 280 x 280 px
   canvas = createCanvas(280, 280);
@@ -62,12 +57,14 @@ $(function () {
   var sequence = getSequence();
   $.ajax({
     type: 'GET',
-    url: '/play/' + key + '/' + sequence,
-    dataType: 'text/html'
-  }).done(function (data) {
-    $('.sentence').html(data);
+    url: '/play/'+key+'/'+sequence,
+    dataType: 'json'
+  }).done(function(data) {
+    if(data){
+      $('.sentence').html(data.sentence);
+    }
   }).fail(function (error) {
-    alert(error);
+      alert(error);
   });
   $(".badge").attr("src","/static/img/badge/"+sequence+".svg");
 
@@ -76,22 +73,23 @@ $(function () {
     url: '/end/' + key + '/' + sequence,
     dataType: 'json'
   }).done(function (data) {
-    if(data.answer){
-      var label = data.answer.label;
-      $('#word').text(label);
-      var confidence = data.answer.confidence;
+    if(data.Answer){
+      var label = data.Answer[0].Label;
+      $('#word').text(hanguel.get(label));
+      var confidence = data.Answer[0].Confidence;
       $('#confidence').html("");
     }
-    if(data.coordinate){
-      for(var i =0 ; i<data.coordinate;i++){
-        startingStrokes.push(data.coordinate[i])
+    if(data.Coordinate){
+      for(var i =0 ; i<data.Coordinate.length;i++){
+        startingStrokes.push(data.Coordinate[i])
       }
     }
   }).fail(function (error) {
-    alert(error);
+    console.log(error);
+  });
+
+  $('.bttn_off_next').click(function(){
+    location.href="/ending/"+key+"/"+(parseInt(sequence)+1);
   });
 });
 
-$('.bttn_off_next').click(function(){
-  location.href="/ending/"+getKey()+"/"+getSequence();
-});

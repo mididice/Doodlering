@@ -13,6 +13,7 @@
 
   <title>doodlering</title>
   <script src="/static/lib/jquery.min.js"></script>
+  <script src="/static/app/common.js"></script>
   <style>
     html,
     body {
@@ -152,20 +153,4 @@
   </div>
   </div>
 </body>
-<script>
-  $('.bttn_gamestart').click(function () {
-    $.ajax({
-      type: 'GET',
-      url: '/start',
-      dataType: 'json'
-    }).done(function(data) {
-      if(data.key){
-        location.href="/playing/"+data.key+"/1";
-      }
-    }).fail(function (error) {
-        alert(error);
-    });
-  });
-</script>
-
 </html>

@@ -29,11 +29,6 @@ let current_raw_line = [];
 
 let prediction = [];
 
-function preload() {
-  // Load the DoodleNet Image Classification model
-  classifier = ml5.imageClassifier('DoodleNet');
-}
-
 function setup() {
   init(function(){
     console.log('ready.');
@@ -134,9 +129,11 @@ $(function() {
   $.ajax({
     type: 'GET',
     url: '/play/'+key+'/'+sequence,
-    dataType: 'text/html'
+    dataType: 'json'
   }).done(function(data) {
-    $('.sentence').html(data);
+    if(data){
+      $('.sentence').html(data.sentence);
+    }
   }).fail(function (error) {
       alert(error);
   });
