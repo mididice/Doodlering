@@ -90,6 +90,11 @@ $(function () {
 
   $('.bttn_off_next').click(function(){
     location.href="/ending/"+key+"/"+(parseInt(sequence)+1);
+    if(sequence>=10){
+      location.href="/ending/"+key+"/end"
+    }else{
+      location.href="/ending/"+key+"/"+(parseInt(sequence)+1);
+    }
   });
 });
 

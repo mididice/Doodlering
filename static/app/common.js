@@ -9,14 +9,28 @@ var getSequence = function () {
     var pathNameList = pathName.split("/");
     return pathNameList[2];
 }
+var getShareLink = function(){
+    var pathName = window.location.pathname;
+    pathName = pathName.replace("ending", "story");
+    var pathNameList = pathName.split("/");
+    pathNameList.pop();
+    return( window.location.origin + pathNameList.join('/') );
+}
+//ending-real, story-end
+var copyLink = function () {
+    var copyText = document.getElementById("shareLink").value;
+
+    var tempElem = document.createElement('textarea');
+    tempElem.value = copyText;
+    document.body.appendChild(tempElem);
+  
+    tempElem.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempElem);
+}
 $(function () {
-
-    //ending-real, story-end
-    var copyLink = function () {
-        var copyText = document.getElementById("shareLink");
-        document.execCommand("copy");
-    }
-
+    $('#shareLink').val(getShareLink());
+    $('.real_ending_center_link').text(getShareLink)
     $('.bttn_gamestart').click(function () {
         $.ajax({
             type: 'GET',
@@ -45,5 +59,9 @@ $(function () {
     });
     $('.ending_first').click(function(){
         location.href="/ending/"+getKey()+"/1";
+    });
+
+    $('.bttn_retry').click(function(){
+        location.href="/home";
     });
 });
