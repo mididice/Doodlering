@@ -31,7 +31,6 @@ func main() {
 	r.GET("/playing/:key/:sequence", getPlayingks)
 	r.POST("/play/:key/:sequence", postPlayks)
 	r.GET("/story/:key/:sequence", getStoryks)
-	r.GET("/story/:key/end", getStoryke)
 	r.GET("/ending/:key", getEndingk)
 	r.GET("/ending/:key/:sequence", getEndingks)
 	r.GET("/home", getHome)
@@ -48,10 +47,6 @@ func redirectHome(c *gin.Context) {
 func endingkEnd(c *gin.Context) {
 	c.Header("Content-Type", "text/html")
 	c.HTML(http.StatusOK, "ending-real.html", gin.H{})
-}
-func getStoryke(c *gin.Context) {
-	c.Header("Content-Type", "text/html")
-	c.HTML(http.StatusOK, "story-end.html", gin.H{})
 }
 func getEndingks(c *gin.Context) {
 	if c.Param("sequence") == "end" {
