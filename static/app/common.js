@@ -14,7 +14,7 @@ var getShareLink = function(){
     pathName = pathName.replace("ending", "story");
     var pathNameList = pathName.split("/");
     pathNameList.pop();
-    return( window.location.origin + pathNameList.join('/') );
+    return( window.location.origin + pathNameList.join('/') +"/1");
 }
 //ending-real, story-end
 var copyLink = function () {
