@@ -30,7 +30,7 @@ func main() {
 	r.GET("/start", getStart)
 	r.GET("/playing/:key/:sequence", getPlayingks)
 	r.POST("/play/:key/:sequence", postPlayks)
-	r.GET("/story/:key/sequence", getStoryks)
+	r.GET("/story/:key/:sequence", getStoryks)
 	r.GET("/story/:key/end", getStoryke)
 	r.GET("/ending/:key", getEndingk)
 	r.GET("/ending/:key/:sequence", getEndingks)
