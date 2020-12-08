@@ -65,7 +65,7 @@ ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `doodlering`.`Sentences` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `sentence` VARCHAR(45) NOT NULL,
+  `sentence` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
