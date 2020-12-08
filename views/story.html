@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -254,30 +255,82 @@
     }
 
     .button_assume {
-        width: 26%;
-        padding: 2% 2%;
-        position: absolute;
-        bottom: 0;
-        border-radius: 48px;
-        background-color: #c8fc50;
-        font-family: NanumSquareOTF;
-        font-size: 18px;
-        font-weight: 800;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: -0.72px;
-        text-align: center;
-        color: #111111;
+      width: 26%;
+      padding: 2% 2%;
+      position: absolute;
+      bottom: 0;
+      border-radius: 48px;
+      background-color: #c8fc50;
+      font-family: NanumSquareOTF;
+      font-size: 18px;
+      font-weight: 800;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: -0.72px;
+      text-align: center;
+      color: #111111;
     }
-    .answer0{
-        margin: 4%;
+
+    .button_result {
+      display: none;
+      margin: 4%;
+      width: 86%;
+      height: 30px;
+      position: absolute;
+      left: 4%;
+      bottom: 0;
+      font-family: NanumSquareOTF;
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: -0.56px;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      text-align: center;
     }
-    .answer1{
-        margin: 4% 4% 4% 35%;
+
+    .answer0 {
+      margin: 4%;
     }
-    .answer2{
-        margin: 4% 4% 4% 66%;
+
+    .answer1 {
+      margin: 4% 4% 4% 35%;
+    }
+
+    .answer2 {
+      margin: 4% 4% 4% 66%;
+    }
+
+    .result_ai {
+      background-color: #c8fc50;
+      color: #111111;
+      float: left;
+      width: 45%;
+      border-radius: 48px 0 0 48px;
+      padding: 2% 0 2% 2%;
+    }
+
+    .result_human {
+      background-color: #111111;
+      color: #c8fc50;
+      float: left;
+      border-radius: 0 48px 48px 0;
+      width: 50%;
+      padding: 2% 2% 2% 0;
+    }
+    #aiChoose{
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.72px;
+    }
+    #youChoose{
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.72px;
+    }
+    #word{
+      color: #c7f74f
     }
   </style>
 
@@ -298,14 +351,19 @@
         춤을 추고 있네요.</div>
       <div class="introduce">빈 칸에 들어갈 내용을 그려주세요.</div>
       <div class="Rectangle-19" id="drawingPaper">
-          <div class="button_assume answer0">프로도</div>
-          <div class="button_assume answer1">라이언</div>
-          <div class="button_assume answer2">무지</div>
+        <div class="button_assume answer0">프로도</div>
+        <div class="button_assume answer1">라이언</div>
+        <div class="button_assume answer2">무지</div>
+        <div class="button_result">
+          <div class="result_ai"><span id="aiChoose">어피치</span>(AI)</div>
+          <div class="result_human"><span id="youChoose">죠르디</span>(YOU)</div>
+        </div>
+        <input type="hidden" id="answer">
       </div>
     </div>
     <div class="ui_bottom">
       <picture>
-        <img src="/static/img/bttn_off_back/1.svg" alt="next button" style="object-fit: cover;" class="bttn_off_back"
+        <img src="/static/img/bttn_off_back/0.svg" alt="next button" style="object-fit: cover;" class="bttn_off_back"
           loading="lazy" />
       </picture>
       <picture>
@@ -314,7 +372,6 @@
       </picture>
     </div>
   </div>
-  <script src="/static/app/common.js"></script>
   <script src="/static/app/quiz_doodle.js"></script>
 </body>
 

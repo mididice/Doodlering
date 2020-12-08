@@ -9,104 +9,40 @@ Canvas Image Classification using DoodleNet and p5.js
 This example uses a callback pattern to create the classifier
 === */
 
-// Initialize the Image Classifier method with DoodleNet.
-let classifier;
-
-// A variable to hold the canvas image we want to classify
 let canvas;
 
-// Two variable to hold the label and confidence of the result
 let label;
 let confidence;
 
-let possibleDraw = true;
+let startingStrokes = [];
 
-let firstClicked = false;
-
-let strokes = [];
-
-let current_raw_line = [];
-
-let prediction = [];
+let startingStrokeIndex = 0;
 
 function setup() {
-  init(function(){
-    console.log('ready.');
-  });
   // Create a canvas with 280 x 280 px
   canvas = createCanvas(280, 280);
   canvas.parent('drawingPaper');
   // Set canvas background to white
   background('#3644eb');
-  // Whenever mouseReleased event happens on canvas, call "classifyCanvas" function
-  //canvas.mouseReleased(classifyCanvas);
-  canvas.touchEnded(classifyCanvas);
-  // Create a clear canvas button
-  const button = select('.bttn_redraw');
-  button.mousePressed(clearCanvas);
-  button.touchStarted(clearCanvas);
-  // Create 'label' and 'confidence' div to hold results
-}
-
-function clearCanvas() {
-  background('#3644eb');
-  window.document.getElementById('word').textContent = '___';
 }
 
 function draw() {
-  
-// Set stroke weight to 10
-strokeWeight(15);
-// Set stroke color to black
-stroke(255);
-// If mouse is pressed, draw line between previous and current mouse positions
-if (mouseIsPressed) {
-  line(pmouseX, pmouseY, mouseX, mouseY);
-  current_raw_line.push([pmouseX, pmouseY, mouseX, mouseY]);
-  
-}
-  
-}
 
-function classifyCanvas() {
-  classifier.classify(canvas, gotResult);
-}
+  // Set stroke weight to 10
+  strokeWeight(15);
+  // Set stroke color to black
+  stroke(255);
+  
+  if(startingStrokeIndex < startingStrokes.length) {
+    let strokeXY = startingStrokes[startingStrokeIndex];
+    dx = strokeXY[0];
+    dy = strokeXY[1];
 
-// A function to run when we get any errors and the results
-function gotResult(error, results) {
-  // Display error in the console
-  if (error) {
-    console.error(error);
+    line(strokeXY[0], strokeXY[1], strokeXY[2], strokeXY[3]);
+  
+    startingStrokeIndex++;
   }
-  // The results are in an array ordered by confidence.
-  console.log(results);
-  prediction = results;
-  // Show the first label and confidence
-  window.document.getElementById('word').textContent = hanguel.get(results[0].label);
-  console.log(`Confidence: ${nf(results[0].confidence, 0, 2)}`); // Round the confidence to 0.01
 }
-
-var init = function() {
-  screen_width = get_window_width(); //window.innerWidth
-  screen_height = get_window_height(); //window.innerHeight
-
-  // var canvas = document.getElementsByTagName("canvas")[0];
-};
-
-function get_window_width() {
-  // return p.windowWidth;
-  return window.innerWidth;
-}
-
-function get_window_height() {
-  // return p.windowHeight;
-  return window.innerHeight;
-}
-
-function setPossibleDraw(){
-  possibleDraw = true;
-}
-
 $('.bttn_off_next').click(function(){
   var key = getKey();
   var sequence = getSequence();
@@ -122,6 +58,15 @@ var getSequence = function(){
   var pathName = window.location.pathname;
   var pathNameList = pathName.split("/");
   return pathNameList[3];
+}
+var shuffleArray = function(array){
+  for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+  }
+  return array;
 }
 $(function() {
   var key = getKey();
@@ -144,13 +89,12 @@ $(function() {
     url: '/tale/' + key + '/' + sequence,
     dataType: 'json'
   }).done(function (data) {
-    if(data.answer){
-      var label = data.answer[0].label;
-      for(var i=0; i<data.answer.length;i++){
-        $('.answer'+i).text(hanguel.get(data.answer[i]));
+    if(data.candidate){
+      $('#answer').val(hanguel.get(data.candidate[0]));
+      var candidates = shuffleArray(data.candidate);
+      for(var i=0; i<candidates.length;i++){
+        $('.answer'+i).text(hanguel.get(candidates[i]));
       }
-      var confidence = data.answer.confidence;
-      $('#confidence').html("");
     }
     if(data.coordinate){
       for(var i =0 ; i<data.coordinate.length;i++){
@@ -160,12 +104,25 @@ $(function() {
   }).fail(function (error) {
     alert(error);
   });
-});
 
-$(document).on(".button_assume", "click", function(){
-  var label = $(this).text();
-  $('#answer').label();
-});
-$('.bttn_off_next').click(function(){
-  location.href="/story/"+getKey()+"/"+getSequence();
+  $('.bttn_off_next').click(function(){
+    if(sequence>=10){
+      location.href="/story/"+key+"/end"
+    }else{
+      location.href="/story/"+key+"/"+(parseInt(sequence)+1);
+    }
+  });
+
+  $('.button_assume').click(function(){
+    var label = $(this).text();
+    $('#word').text(label);
+
+    $(this).css("background-color", "#111111");
+    $(this).css("color", "#c8fc50");
+    var answer = $('#answer').val();
+    $('#aiChoose').text(answer);
+    $('#youChoose').text(label);
+    $('.button_assume').hide();
+    $('.button_result').show();
+  });
 });
