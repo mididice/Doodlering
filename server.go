@@ -140,7 +140,7 @@ func getPlayks(c *gin.Context) {
 	sequence := c.Param("sequence")
 
 	var sentence string
-	DB.QueryRow("SELECT sentence FROM DOODLERING.Sentences WHERE id =`" + sequence + "`;").Scan(&sentence)
+	DB.QueryRow("SELECT sentence FROM Sentences WHERE id =" + sequence + ";").Scan(&sentence)
 	c.JSON(200, Sentences{
 		Sentence: sentence,
 	})
@@ -179,7 +179,7 @@ func taleks(c *gin.Context) {
 	}
 	var tale Tale
 	var tmp []string
-	for i := 0; i < 2; i++ {
+	for i := 0; i < 3; i++ {
 		tmp = append(tmp, words[i].Label)
 	}
 	tale.Candidate = tmp
