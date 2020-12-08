@@ -140,7 +140,7 @@ func getPlayks(c *gin.Context) {
 	sequence := c.Param("sequence")
 
 	var sentence string
-	DB.QueryRow("SELECT sentence FROM DOODLERING.Sentences WHERE id =`" + sequence + "`;").Scan(&sentence)
+	DB.QueryRow("SELECT sentence FROM Sentences WHERE id =" + sequence + ";").Scan(&sentence)
 	c.JSON(200, Sentences{
 		Sentence: sentence,
 	})
