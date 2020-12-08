@@ -179,7 +179,7 @@ func taleks(c *gin.Context) {
 	}
 	var tale Tale
 	var tmp []string
-	for i := 0; i < 2; i++ {
+	for i := 0; i < 3; i++ {
 		tmp = append(tmp, words[i].Label)
 	}
 	tale.Candidate = tmp
