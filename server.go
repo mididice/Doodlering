@@ -136,11 +136,8 @@ func postPlayks(c *gin.Context) {
 }
 
 func getPlayks(c *gin.Context) {
-	// key := c.Param("key")
-	sequence := c.Param("sequence")
-
 	var sentence string
-	DB.QueryRow("SELECT sentence FROM Sentences WHERE id =" + sequence + ";").Scan(&sentence)
+	DB.QueryRow("SELECT sentence FROM Sentences ORDER BY RAND() LIMIT 1;").Scan(&sentence)
 	c.JSON(200, Sentences{
 		Sentence: sentence,
 	})
