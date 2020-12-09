@@ -24,7 +24,10 @@ func main() {
 		return
 	}
 
-	r := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+	r := gin.New()
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
 	r.HTMLRender = ginview.Default()
 	r.Static("/static", "./static")
 	r.GET("/start", getStart)
@@ -39,7 +42,12 @@ func main() {
 	r.GET("/tale/:key/:sequence", taleks)
 	r.GET("/play/:key/:sequence", getPlayks)
 	r.GET("/", redirectHome)
-	r.Run(":8080")
+	server := &http.Server{
+		Addr:    ":8080",
+		Handler: r,
+	}
+	server.SetKeepAlivesEnabled(false)
+	server.ListenAndServe()
 }
 func redirectHome(c *gin.Context) {
 	c.Redirect(http.StatusMovedPermanently, "/home")
