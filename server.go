@@ -30,6 +30,7 @@ func main() {
 	r.Use(gin.Recovery())
 	r.HTMLRender = ginview.Default()
 	r.Static("/static", "./static")
+	r.StaticFS("/model", http.Dir("model"))
 	r.GET("/start", getStart)
 	r.GET("/playing/:key/:sequence", getPlayingks)
 	r.POST("/play/:key/:sequence", postPlayks)
