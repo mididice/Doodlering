@@ -96,7 +96,8 @@ func getStart(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"key": uuid,
 	})
-	_, err := DB.Exec("INSERT INTO `doodlering`.`Games` (`key`) VALUES ('" + uuid.String() + "');")
+	testDB, _ := sql.Open("mysql", "root:1q2w3e4r5T!@@tcp(localhost:3306)/doodlering")
+	_, err := testDB.Exec("INSERT INTO `doodlering`.`Games` (`key`) VALUES ('" + uuid.String() + "');")
 	if err != nil {
 		fmt.Println(err)
 		return
