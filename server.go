@@ -24,7 +24,7 @@ func main() {
 		return
 	}
 
-	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
@@ -145,7 +145,24 @@ func postPlayks(c *gin.Context) {
 
 func getPlayks(c *gin.Context) {
 	var sentence string
-	DB.QueryRow("SELECT sentence FROM Sentences ORDER BY RAND() LIMIT 1;").Scan(&sentence)
+	var sentenceId string
+	key := c.Param("key")
+	sequence := c.Param("sequence")
+	query := "SELECT Sentences_id FROM Doodlering.Play_has_Sentences where Play_id = '" +
+		sequence + "' AND Play_Games_key = '" + key + "';"
+	err := DB.QueryRow(query).Scan(&sentenceId)
+	if err != nil {
+		//no data.
+		DB.QueryRow("SELECT id, sentence FROM Sentences ORDER BY RAND() LIMIT 1;").Scan(&sentenceId, &sentence)
+		query = "INSERT INTO `Doodlering`.`Play_has_Sentences` (`Play_id`, `Play_Games_key`, `Sentences_id`) " +
+			"VALUES (" + sequence + ", '" + key + "', " + sentenceId + ");"
+		DB.Exec(query)
+		c.JSON(200, Sentences{
+			Sentence: sentence,
+		})
+		return
+	}
+	err = DB.QueryRow("SELECT sentence FROM Sentences WHERE id = " + sentenceId + ";").Scan(&sentence)
 	c.JSON(200, Sentences{
 		Sentence: sentence,
 	})

@@ -82,14 +82,34 @@ ALTER TABLE `doodlering`.`Words`
 CHANGE COLUMN `word` `label` VARCHAR(255) NOT NULL ,
 ADD COLUMN `confidence` VARCHAR(255) NOT NULL AFTER `Play_Games_key`;
 
-ALTER TABLE `Doodlering`.`Words` 
+ALTER TABLE `doodlering`.`Words` 
 CHANGE COLUMN `confidence` `confidence` FLOAT NOT NULL ;
 
-ALTER TABLE `Doodlering`.`Coordinate` 
+ALTER TABLE `doodlering`.`Coordinate` 
 CHANGE COLUMN `x` `x` FLOAT NOT NULL ,
 CHANGE COLUMN `y` `y` FLOAT NOT NULL ,
 CHANGE COLUMN `dx` `dx` FLOAT NOT NULL ,
 CHANGE COLUMN `dy` `dy` FLOAT NOT NULL ;
+
+CREATE TABLE IF NOT EXISTS `doodlering`.`Play_has_Sentences` (
+  `Play_id` INT(11) NOT NULL,
+  `Play_Games_key` VARCHAR(255) NOT NULL,
+  `Sentences_id` INT(11) NOT NULL,
+  PRIMARY KEY (`Play_id`, `Play_Games_key`, `Sentences_id`),
+  INDEX `fk_Play_has_Sentences_Sentences1_idx` (`Sentences_id` ASC),
+  INDEX `fk_Play_has_Sentences_Play1_idx` (`Play_id` ASC, `Play_Games_key` ASC),
+  CONSTRAINT `fk_Play_has_Sentences_Play1`
+    FOREIGN KEY (`Play_id` , `Play_Games_key`)
+    REFERENCES `Doodlering`.`Play` (`id` , `Games_key`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Play_has_Sentences_Sentences1`
+    FOREIGN KEY (`Sentences_id`)
+    REFERENCES `Doodlering`.`Sentences` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
