@@ -43,7 +43,7 @@ func main() {
 	r.GET("/play/:key/:sequence", getPlayks)
 	r.GET("/", redirectHome)
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    "",
 		Handler: r,
 	}
 	server.SetKeepAlivesEnabled(false)
