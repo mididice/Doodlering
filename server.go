@@ -15,7 +15,7 @@ import (
 var DB *sql.DB
 
 func main() {
-	fmt.Println("start")
+	fmt.Println("start!")
 	var err error
 	DB, err = sql.Open("mysql", "root:1q2w3e4r5T!@@tcp(localhost:3306)/doodlering")
 
