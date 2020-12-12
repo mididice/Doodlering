@@ -1,97 +1,119 @@
-// Copyright (c) 2019 ml5
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
-
-/* ===
-ml5 Example
-Canvas Image Classification using DoodleNet and p5.js
-This example uses a callback pattern to create the classifier
-=== */
-
-// Initialize the Image Classifier method with DoodleNet.
-let classifier;
-
-// A variable to hold the canvas image we want to classify
-let canvas;
-
-// Two variable to hold the label and confidence of the result
-let label;
-let confidence;
-
-let possibleDraw = true;
+// Copyright (c) 2020 https://github.com/yining1023/machine-learning-for-the-web/tree/master/cnn/DoodleClassifier100
+const IMAGE_SIZE = 784;
+const CLASSES = ['laptop', 'rainbow', 'baseball_bat', 'ice_cream', 'flower', 'suitcase', 'tree', 'microphone', 'sword', 'helmet', 'apple', 'umbrella', 'frying_pan', 'envelope', 'triangle', 'alarm_clock', 'paper_clip', 'light_bulb', 'scissors', 'cat', 't-shirt', 'ceiling_fan', 'key', 'mountain', 'table', 'moon', 'smiley_face', 'car', 'spoon', 'bird', 'saw', 'traffic_light', 'knife', 'wristwatch', 'shovel', 'circle', 'face', 'bridge', 'camera', 'bread', 'screwdriver', 'tennis_racquet', 'cell_phone', 'airplane', 'bed', 'baseball', 'moustache', 'candle', 'tooth', 'star', 'sock', 'dumbbell', 'lollipop', 'bicycle', 'hat', 'spider', 'clock', 'shorts', 'anvil', 'pants', 'syringe', 'ladder', 'axe', 'headphones', 'grapes', 'square', 'chair', 'coffee_cup', 'lightning', 'cookie', 'wheel', 'pencil', 'cloud', 'mushroom', 'door', 'drums', 'fan', 'bench', 'sun', 'stop_sign', 'eye', 'beard', 'radio', 'snake', 'line', 'power_outlet', 'diving_board', 'rifle', 'eyeglasses', 'broom', 'donut', 'pillow', 'hot_dog', 'butterfly', 'hammer', 'basketball', 'book', 'tent', 'pizza', 'cup'];
+let model;
+let cnv;
 
 let current_raw_line = [];
-
 let prediction = [];
 
-function preload() {
-  // Load the DoodleNet Image Classification model
-  classifier = ml5.imageClassifier('DoodleNet');
+async function loadMyModel() {
+  model = await tf.loadLayersModel('/model/model.json');
+  model.summary();
 }
 
 function setup() {
-  init(function(){
-    console.log('ready.');
-  });
-  // Create a canvas with 280 x 280 px
-  canvas = createCanvas(280, 280);
-  canvas.parent('drawingPaper');
-  // Set canvas background to white
+  loadMyModel();
+
+  cnv = createCanvas(280, 280);
   background('#3644eb');
-  // Whenever mouseReleased event happens on canvas, call "classifyCanvas" function
-  //canvas.mouseReleased(classifyCanvas);
-  canvas.touchEnded(classifyCanvas);
-  // Create a clear canvas button
-  const button = select('.bttn_redraw');
-  button.mousePressed(clearCanvas);
-  button.touchStarted(clearCanvas);
-  // Create 'label' and 'confidence' div to hold results
+
+  // cnv.mouseReleased(guess);
+  cnv.touchEnded(guess);
+  cnv.parent('drawingPaper');
+
+  let clearButton = select('.bttn_redraw');
+  clearButton.mousePressed(() => {
+    clear();
+    background('#3644eb');
+    current_raw_line = [];
+    prediction = [];
+    select('#word').html("____");
+  });
 }
 
-function clearCanvas() {
-  background('#3644eb');
-  current_raw_line = [];
-  prediction = [];
-  window.document.getElementById('word').textContent = '___';
+function guess() {
+
+  // Get input image from the canvas
+  const inputs = getInputImage();
+
+  // Predict
+  let guess = model.predict(tf.tensor([inputs]));
+
+  // Format res to an array
+  const rawProb = Array.from(guess.dataSync());
+
+  // Get top 5 res with index and probability
+  const rawProbWIndex = rawProb.map((probability, index) => {
+    return {
+      index,
+      probability
+    }
+  });
+
+  const sortProb = rawProbWIndex.sort((a, b) => b.probability - a.probability);
+  const top5ClassWIndex = sortProb.slice(0, 5);
+  const results = [];
+  top5ClassWIndex.map(i=> results.push({['label']: hanguel.get(CLASSES[i.index]) , ['confidence']: i.probability}));
+  prediction = results;
+  select('#word').html(results[0].label);
 }
+
+function getInputImage() {
+  let inputs = [];
+  // p5 function, get image from the canvas
+  let img = get();
+  img.resize(28, 28);
+  img.loadPixels();
+  
+  // Group data into [[[i00] [i01], [i02], [i03], ..., [i027]], .... [[i270], [i271], ... , [i2727]]]]
+  let oneRow = [];
+
+  for (let i = 0; i < IMAGE_SIZE; i++) {
+    //54, 68, 235
+    let bright = img.pixels[i * 4];
+    // let green = img.pixels[i*4+1];
+    // let blue = img.pixels[i*4+2];
+    let onePix = [parseFloat((255 - bright) / 255)];
+    
+    oneRow.push(onePix);
+    if (oneRow.length === 28) {
+      inputs.push(oneRow);
+      oneRow = [];
+    }
+  }
+  return inputs;
+}
+var threshold = function(pixels, level) {
+
+  if (level === undefined) {
+    level = 0.5;
+  }
+  const thresh = Math.floor(level * 255);
+
+  for (let i = 0; i < pixels.length; i += 4) {
+    const r = pixels[i];
+    const g = pixels[i + 1];
+    const b = pixels[i + 2];
+    const gray = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    let val;
+    if (gray >= thresh) {
+      val = 255;
+    } else {
+      val = 0;
+    }
+    pixels[i] = pixels[i + 1] = pixels[i + 2] = val;
+  }
+};
 
 function draw() {
-  
-// Set stroke weight to 10
-strokeWeight(15);
-// Set stroke color to black
-stroke(255);
-// If mouse is pressed, draw line between previous and current mouse positions
-if (mouseIsPressed) {
-  line(pmouseX, pmouseY, mouseX, mouseY);
-  current_raw_line.push([pmouseX, pmouseY, mouseX, mouseY]);
-}
-  
-}
-
-function classifyCanvas() {
-  classifier.classify(canvas, gotResult);
-}
-
-// A function to run when we get any errors and the results
-function gotResult(error, results) {
-  // Display error in the console
-  if (error) {
-    console.error(error);
+  strokeWeight(10);
+  stroke(255);
+  if (mouseIsPressed) {
+    line(pmouseX, pmouseY, mouseX, mouseY);
+    current_raw_line.push([pmouseX, pmouseY, mouseX, mouseY]);
   }
-  // The results are in an array ordered by confidence.
-  prediction = results;
-  // Show the first label and confidence
-  window.document.getElementById('word').textContent = hanguel.get(results[0].label);
 }
-
-var init = function() {
-  screen_width = get_window_width(); //window.innerWidth
-  screen_height = get_window_height(); //window.innerHeight
-
-  // var canvas = document.getElementsByTagName("canvas")[0];
-};
 
 function get_window_width() {
   // return p.windowWidth;
@@ -103,11 +125,11 @@ function get_window_height() {
   return window.innerHeight;
 }
 
-function setPossibleDraw(){
-  possibleDraw = true;
-}
-
 $('.bttn_off_next').click(function(){
+  filter(INVERT);
+  filter(THRESHOLD);
+  guess();
+  background('#3644eb');
   var key = getKey();
   var sequence = getSequence();
   var data = {"prediction":prediction, "coordinate": current_raw_line};
