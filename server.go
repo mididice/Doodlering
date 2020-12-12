@@ -96,7 +96,11 @@ func getStart(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"key": uuid,
 	})
-	DB.Exec("INSERT INTO `doodlering`.`Games` (`key`) VALUES ('" + uuid.String() + "');")
+	_, err := DB.Exec("INSERT INTO `doodlering`.`Games` (`key`) VALUES ('" + uuid.String() + "');")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 func getPlayingks(c *gin.Context) {
 	c.Header("Content-Type", "text/html")
