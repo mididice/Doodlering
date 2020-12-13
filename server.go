@@ -24,9 +24,9 @@ func main() {
 		return
 	}
 
-	// gin.SetMode(gin.ReleaseMode)
-	// r := gin.New()
-	r := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+	r := gin.New()
+	// r := gin.Default()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	r.HTMLRender = ginview.Default()
@@ -45,13 +45,13 @@ func main() {
 	r.GET("/play/:key/:sequence", getPlayks)
 	r.GET("/", redirectHome)
 
-	r.Run()
-	// server := &http.Server{
-	// 	Addr:    "",
-	// 	Handler: r,
-	// }
-	// server.SetKeepAlivesEnabled(false)
-	// server.ListenAndServe()
+	// r.Run()
+	server := &http.Server{
+		Addr:    "",
+		Handler: r,
+	}
+	server.SetKeepAlivesEnabled(false)
+	server.ListenAndServe()
 }
 func redirectHome(c *gin.Context) {
 	c.Redirect(http.StatusMovedPermanently, "/home")
@@ -96,8 +96,7 @@ func getStart(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"key": uuid,
 	})
-	testDB, _ := sql.Open("mysql", "root:1q2w3e4r5T!@@tcp(localhost:3306)/doodlering")
-	_, err := testDB.Exec("INSERT INTO `doodlering`.`Games` (`key`) VALUES ('" + uuid.String() + "');")
+	_, err := DB.Exec("INSERT INTO `doodlering`.`Games` (`key`) VALUES ('" + uuid.String() + "');")
 	if err != nil {
 		fmt.Println(err)
 		return
