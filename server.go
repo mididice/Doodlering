@@ -24,7 +24,7 @@ func main() {
 		return
 	}
 
-	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	// r := gin.Default()
 	r.Use(gin.Logger())
@@ -45,13 +45,13 @@ func main() {
 	r.GET("/play/:key/:sequence", getPlayks)
 	r.GET("/", redirectHome)
 
-	// r.Run()
-	server := &http.Server{
-		Addr:    "",
-		Handler: r,
-	}
-	server.SetKeepAlivesEnabled(false)
-	server.ListenAndServe()
+	r.Run()
+	// server := &http.Server{
+	// 	Addr:    "",
+	// 	Handler: r,
+	// }
+	// server.SetKeepAlivesEnabled(false)
+	// server.ListenAndServe()
 }
 func redirectHome(c *gin.Context) {
 	c.Redirect(http.StatusMovedPermanently, "/home")
