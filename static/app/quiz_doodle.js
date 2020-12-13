@@ -77,7 +77,7 @@ $(function() {
     dataType: 'json'
   }).done(function(data) {
     if(data){
-      $('.sentence').html(data.sentence);
+      $('.sentence').html(data.Sentence);
     }
   }).fail(function (error) {
       alert(error);

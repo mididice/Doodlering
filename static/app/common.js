@@ -30,7 +30,8 @@ var copyLink = function () {
 }
 $(function () {
     $('#shareLink').val(getShareLink());
-    $('.real_ending_center_link').text(getShareLink)
+    $('.real_ending_center_link').text(getShareLink());
+    $('.real_ending_center_link').attr("href", getShareLink());
     $('.bttn_gamestart').click(function () {
         $.ajax({
             type: 'GET',
