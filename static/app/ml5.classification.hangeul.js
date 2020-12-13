@@ -12,7 +12,7 @@ let hanguel = new Map([
 ["pliers","펜치"],
 ["watermelon","수박"],
 ["apple","사과"],
-["baseball","야구"],
+["baseball","야구공"],
 ["feather","깃털"],
 ["shoe","신발"],
 ["leaf","잎"],
@@ -109,7 +109,7 @@ let hanguel = new Map([
 ["coffee_cup","커피잔"],
 ["computer","컴퓨터"],
 ["matches","성냥"],
-["beard","빵"],
+["bread","빵"],
 ["frog","개구리"],
 ["crocodile","악어"],
 ["bathtub","욕조"],
@@ -343,4 +343,5 @@ let hanguel = new Map([
 ["streetlight","가로등"],
 ["bed","침대"],
 ["firetruck","소방차"],
+["beard","수염"]
 ])

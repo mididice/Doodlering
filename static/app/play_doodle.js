@@ -3,6 +3,7 @@ const IMAGE_SIZE = 784;
 const CLASSES = ['laptop', 'rainbow', 'baseball_bat', 'ice_cream', 'flower', 'suitcase', 'tree', 'microphone', 'sword', 'helmet', 'apple', 'umbrella', 'frying_pan', 'envelope', 'triangle', 'alarm_clock', 'paper_clip', 'light_bulb', 'scissors', 'cat', 't-shirt', 'ceiling_fan', 'key', 'mountain', 'table', 'moon', 'smiley_face', 'car', 'spoon', 'bird', 'saw', 'traffic_light', 'knife', 'wristwatch', 'shovel', 'circle', 'face', 'bridge', 'camera', 'bread', 'screwdriver', 'tennis_racquet', 'cell_phone', 'airplane', 'bed', 'baseball', 'moustache', 'candle', 'tooth', 'star', 'sock', 'dumbbell', 'lollipop', 'bicycle', 'hat', 'spider', 'clock', 'shorts', 'anvil', 'pants', 'syringe', 'ladder', 'axe', 'headphones', 'grapes', 'square', 'chair', 'coffee_cup', 'lightning', 'cookie', 'wheel', 'pencil', 'cloud', 'mushroom', 'door', 'drums', 'fan', 'bench', 'sun', 'stop_sign', 'eye', 'beard', 'radio', 'snake', 'line', 'power_outlet', 'diving_board', 'rifle', 'eyeglasses', 'broom', 'donut', 'pillow', 'hot_dog', 'butterfly', 'hammer', 'basketball', 'book', 'tent', 'pizza', 'cup'];
 let model;
 let cnv;
+let startDraw = false;
 
 let current_raw_line = [];
 let prediction = [];
@@ -29,6 +30,8 @@ function setup() {
     current_raw_line = [];
     prediction = [];
     select('#word').html("____");
+    $('.bttn_off_next').attr("src", "/static/img/bttn_off_next/0.svg");
+    startDraw = false;
   });
 }
 
@@ -112,6 +115,10 @@ function draw() {
   if (mouseIsPressed) {
     line(pmouseX, pmouseY, mouseX, mouseY);
     current_raw_line.push([pmouseX, pmouseY, mouseX, mouseY]);
+    startDraw = true;
+  }
+  if(startDraw){
+    $('.bttn_off_next').attr("src", "/static/img/bttn_off_next/"+getSequence()+".svg");
   }
 }
 
@@ -124,18 +131,28 @@ function get_window_height() {
   // return p.windowHeight;
   return window.innerHeight;
 }
-
+$('.bttn_off_back').click(function(){
+  var sequence = getSequence();
+  if(sequence>1){
+    location.href="/playing/"+key+"/"+(parseInt(sequence)-1);
+  }else{
+    location.href="/home";
+  }
+});
 $('.bttn_off_next').click(function(){
-  filter(INVERT);
-  filter(THRESHOLD);
-  guess();
-  background('#3644eb');
+  if(startDraw){
+    filter(INVERT);
+    filter(THRESHOLD);
+    guess();
+    background('#3644eb');
+  }
   var key = getKey();
   var sequence = getSequence();
   var data = {"prediction":prediction, "coordinate": current_raw_line};
   if(prediction.length<1){
     return;
   }
+  $(this).attr('disabled', true);
   $.ajax({
     type: 'POST',
     url: '/play/'+key+'/'+sequence,
@@ -178,5 +195,6 @@ $(function() {
       alert(error);
   });
 
-  $(".badge").attr("src","/static/img/badge/"+sequence+".svg");
+  $(".badge").attr("src", "/static/img/badge/"+sequence+".svg");
+  $('.bttn_off_back').attr("src", "/static/img/bttn_off_back/"+sequence+".svg");
 });
