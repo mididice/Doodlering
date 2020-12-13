@@ -75,7 +75,7 @@ $(function () {
   }).done(function (data) {
     if(data.Answer){
       var label = data.Answer[0].Label;
-      $('#word').text(hanguel.get(label));
+      $('#word').text(label);
       var confidence = data.Answer[0].Confidence;
       $('#confidence').html("");
     }

@@ -90,10 +90,10 @@ $(function() {
     dataType: 'json'
   }).done(function (data) {
     if(data.candidate){
-      $('#answer').val(hanguel.get(data.candidate[0]));
+      $('#answer').val(data.candidate[0]);
       var candidates = shuffleArray(data.candidate);
       for(var i=0; i<candidates.length;i++){
-        $('.answer'+i).text(hanguel.get(candidates[i]));
+        $('.answer'+i).text(candidates[i]);
       }
     }
     if(data.coordinate){
