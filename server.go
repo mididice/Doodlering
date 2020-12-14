@@ -47,13 +47,13 @@ func main() {
 	r.GET("/play/:key/:sequence", getPlayks)
 	r.GET("/", redirectHome)
 	r.GET("/stories", getStories)
-	r.Run()
-	// server := &http.Server{
-	// 	Addr:    "",
-	// 	Handler: r,
-	// }
-	// server.SetKeepAlivesEnabled(false)
-	// server.ListenAndServe()
+	// r.Run()
+	server := &http.Server{
+		Addr:    "",
+		Handler: r,
+	}
+	server.SetKeepAlivesEnabled(false)
+	server.ListenAndServe()
 }
 func redirectHome(c *gin.Context) {
 	c.Redirect(http.StatusMovedPermanently, "/home")
