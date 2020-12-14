@@ -51,3 +51,9 @@ GET /ending/{key}/end
 # 공유 화면 마지막
 GET /story/{key}/end
 - story-end.html
+
+GET /stories
+[
+{"key": "key", "sentence": "옛날옛적에", "date":"2020-01-01"},
+{"key": "key", "sentence": "아기돼지삼형제", "date":"2020-01-01"}
+]
