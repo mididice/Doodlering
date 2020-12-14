@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="description" content="make setence with doodling">
-  <meta name="keywords" content="midiDice sketch-rnn 두들링 ">
+  <meta name="keywords" content="midiDICE sketch-rnn 두들링 doodlering 아트센터나비">
   <meta name="author" content="midiDice">
 
   <title>doodlering</title>
@@ -20,6 +20,8 @@
       width: 100vw;
       height: auto !important;
       min-height: 100vh;
+      min-width: 350px;
+      max-width: 420px;
       background-color: #2a2c2e;
       margin: 0;
       overflow: hidden;
@@ -36,16 +38,24 @@
     .bttn_gamestart {
       position: absolute;
       bottom: 0;
-      left: 12%;
+      left: 15%;
       margin-bottom: 40%;
+    }
+
+    .bttn_viewstories{
+      position: absolute;
+      bottom: 0;
+      left: 15%;
+      bottom: 0;
+      margin-bottom: 28%;
     }
 
     .bttn_howtoplay {
       position: absolute;
       bottom: 0;
-      left: 12%;
+      left: 15%;
       bottom: 0;
-      margin-bottom: 22%;
+      margin-bottom: 16%;
     }
 
     .background_image {
@@ -63,6 +73,12 @@
     <picture>
       <img src="/static/img/bttn_gamestart.png" alt="game start" style="object-fit: cover;" class="bttn_gamestart"
         loading="lazy" />
+    </picture>
+    <picture>
+      <a href="/stories">
+        <img src="/static/img/bttn_viewstories.png" alt="game start" style="object-fit: cover;" class="bttn_viewstories"
+          loading="lazy" />
+      </a>
     </picture>
     <picture>
       <a href="/howto">

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="description" content="make setence with doodling">
+    <meta name="keywords" content="midiDICE sketch-rnn 두들링 doodlering 아트센터나비">
+    <meta name="author" content="midiDice">
+
+    <title>doodlering</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
+    <script src="/static/lib/jquery.min.js"></script>
+    <script src="/static/app/collection_doodle.js"></script>
+    <style>
+        html,
+        body {
+            width: 100vw;
+            height: auto !important;
+            min-height: 100vh;
+            min-width: 350px;
+            max-width: 1024px;
+            background-color: #2a2c2e;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            padding-right: 0px;
+            padding-left: 0px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+
+        .background_image {
+            position: relative;
+        }
+
+        .bttn_off_back_white {
+            position: absolute;
+            left: 13%;
+            top: 4%;
+        }
+
+        .stories {
+            position: absolute;
+            top: 14%;
+            left: 13%;
+            overflow: auto;
+            height: 80%;
+        }
+
+        .story_box {
+            border-radius: 12px;
+            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+            background-color: #ffffff;
+            width: 74%;
+            min-height: 60px;
+            padding: 20px;
+            margin-bottom: 4%;
+        }
+
+        .story_date {
+            display: block;
+            margin-bottom: 10px;
+            opacity: 0.9;
+            font-family: NanumSquareOTF;
+            font-size: 12px;
+            font-weight: 800;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: -0.48px;
+            text-align: left;
+            color: #b363ea;
+
+        }
+
+        .story_content {
+            opacity: 0.9;
+            font-family: NanumSquareOTF;
+            font-size: 16px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: -0.64px;
+            text-align: left;
+            color: #111111;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <picture>
+            <img src="/static/img/stories_bg.png" alt="user stories bg" style="object-fit: cover;"
+                class="background_image" loading="lazy" />
+        </picture>
+        <picture>
+            <img src="/static/img/bttn_off_back_white.png" alt="back"" style=" object-fit: cover;"
+                class="bttn_off_back_white bttn_retry" loading="lazy" />
+        </picture>
+    </div>
+    <div class="stories">
+        <div class="story_box">
+            <span class="story_date">2020-12-17</span>
+            <a class="story_content">당신은 미디다이스의 <span id="word">____</span>을 감사하고 있습니다.</a>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>

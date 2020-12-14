@@ -4,6 +4,7 @@ const CLASSES = ['laptop', 'rainbow', 'baseball_bat', 'ice_cream', 'flower', 'su
 let model;
 let cnv;
 let startDraw = false;
+let doGuess = false;
 
 let current_raw_line = [];
 let prediction = [];
@@ -31,7 +32,9 @@ function setup() {
     prediction = [];
     select('#word').html("____");
     $('.bttn_off_next').attr("src", "/static/img/bttn_off_next/0.svg");
+    $('.bttn_guess').attr("src", "/static/img/bttn_guess_yet.png")
     startDraw = false;
+    doGuess = false;
   });
 }
 
@@ -60,6 +63,7 @@ function guess() {
   top5ClassWIndex.map(i=> results.push({['label']: hanguel.get(CLASSES[i.index]) , ['confidence']: i.probability}));
   prediction = results;
   select('#word').html(results[0].label);
+  $('.bttn_guess').attr("src", "/static/img/bttn_guess.png");
 }
 
 function getInputImage() {
@@ -117,9 +121,6 @@ function draw() {
     current_raw_line.push([pmouseX, pmouseY, mouseX, mouseY]);
     startDraw = true;
   }
-  if(startDraw){
-    $('.bttn_off_next').attr("src", "/static/img/bttn_off_next/"+getSequence()+".svg");
-  }
 }
 
 function get_window_width() {
@@ -140,11 +141,11 @@ $('.bttn_off_back').click(function(){
   }
 });
 $('.bttn_off_next').click(function(){
-  if(startDraw){
-    filter(INVERT);
-    filter(THRESHOLD);
-    guess();
-    background('#3644eb');
+  if(!startDraw){
+    return;
+  }
+  if(!doGuess){
+    return;
   }
   var key = getKey();
   var sequence = getSequence();
@@ -169,6 +170,17 @@ $('.bttn_off_next').click(function(){
     console.log(error);
   });
 });
+$('.bttn_guess').click(function(){
+  if(startDraw){
+    filter(INVERT);
+    filter(THRESHOLD);
+    guess();
+    background('#3644eb');
+    $('.bttn_off_next').attr("src", "/static/img/bttn_off_next/"+getSequence()+".svg");
+    $('.bttn_guess').attr("src", "/static/img/bttn_guess_yet.png");
+    doGuess = true;
+  }
+});
 
 var getKey = function(){
   var pathName = window.location.pathname;
@@ -189,7 +201,11 @@ $(function() {
     dataType: 'json'
   }).done(function(data) {
     if(data){
-      $('.sentence').html(data.Sentence);
+      if(data.Sentence){
+        $('.sentence').html(data.Sentence);
+      }else{
+        $('.sentence').html("<span id='word'>그림을 그려주세요.</span>");
+      }
     }
   }).fail(function (error) {
       alert(error);

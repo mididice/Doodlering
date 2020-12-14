@@ -87,7 +87,14 @@ $(function () {
   }).fail(function (error) {
     console.log(error);
   });
-
+  $('.bttn_off_back').click(function(){
+    var sequence = getSequence();
+    if(sequence>1){
+      location.href="/ending/"+key+"/"+(parseInt(sequence)-1);
+    }else{
+      location.href="/home";
+    }
+  });
   $('.bttn_off_next').click(function(){
     location.href="/ending/"+key+"/"+(parseInt(sequence)+1);
     if(sequence>=10){

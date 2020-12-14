@@ -16,7 +16,7 @@
     <style>
         html,
         body {
-            width: 360px;
+            width: 100vw;
             height: auto !important;
             min-height: 100vh;
             background-color: #2a2c2e;
@@ -38,14 +38,19 @@
 
         .bttn_gamestart_howto {
             position: absolute;
-            bottom: 13.5%;
-            left: 8%;
+            bottom: 10%;
+            left: 15%;
         }
 
         .ui_popup {
             position: absolute;
-            left: 8%;
-            top: 2%;
+            left: 12%;
+            top: 4%;
+        }
+        .bttn_close{
+            position: absolute;
+            top: 7%;
+            right: 18%;
         }
     </style>
 </head>
@@ -59,6 +64,10 @@
         <picture>
             <img src="/static/img/ui_popup.svg" alt="how to play" class="ui_popup" style="object-fit: cover;"
                 loading="lazy" />
+        </picture>
+        <picture>
+            <img src="/static/img/bttn_close.svg" alt="close" style="object-fit: cover;"
+                class="bttn_close" loading="lazy" />
         </picture>
         <picture>
             <img src="/static/img/bttn_gamestart.png" alt="game start" style="object-fit: cover;"

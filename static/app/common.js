@@ -65,4 +65,7 @@ $(function () {
     $('.bttn_retry').click(function(){
         location.href="/home";
     });
+    $('.bttn_close').click(function(){
+        location.href="/home";
+    });
 });

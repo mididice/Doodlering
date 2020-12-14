@@ -118,12 +118,16 @@
 
     .bttn_off_next {
       float: right;
-      margin: 5% 8% 5% 8%;
+      margin: 5% 8% 5% 0;
     }
 
     .bttn_off_back {
       float: left;
-      margin: 5% 8% 5% 8%;
+      margin: 5% 0 5% 8%;
+    }
+    .bttn_guess{
+      float: left;
+      margin: 5% 0 0 10%;
     }
   </style>
 
@@ -152,8 +156,12 @@
     </div>
     <div class="ui_bottom">
       <picture>
-        <img src="" alt="next button" style="object-fit: cover;" class="bttn_off_back"
+        <img src="" alt="back button" style="object-fit: cover;" class="bttn_off_back"
           loading="lazy" />
+      </picture>
+      <picture>
+        <img src="/static/img/bttn_guess_yet.png" alt="guess" style="object-fit: cover;" class="bttn_guess"
+            loading="lazy" />
       </picture>
       <picture>
         <img src="/static/img/bttn_off_next/0.svg" alt="next button" style="object-fit: cover;" class="bttn_off_next"
