@@ -288,7 +288,9 @@ func getEndk(c *gin.Context) {
 	c.HTML(http.StatusOK, "playing-end.html", gin.H{})
 }
 func getStories(c *gin.Context) {
-	query := "SELECT Games_key, p.gen_date, s.sentence as sentence FROM Play as p join Play_has_Sentences as ps on p.id = ps.Play_id join Sentences as s on ps.Sentences_id = s.id where sequence = 1;"
+	query := "SELECT Games_key, gen_date, sentence " +
+		"FROM Play as p left join Play_has_Sentences as ps on p.id = ps.Play_id " +
+		"left join Sentences as s on ps.Sentences_id = s.id where sequence = 1;"
 	result, err := DB.Query(query)
 	if err != nil {
 		return
