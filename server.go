@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strings"
+	"time"
 
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
@@ -44,12 +46,12 @@ func main() {
 	r.GET("/tale/:key/:sequence", taleks)
 	r.GET("/play/:key/:sequence", getPlayks)
 	r.GET("/", redirectHome)
-
-	//r.Run()
-	 server := &http.Server{
-	 	Addr:    "",
-	 	Handler: r,
-	 }
+	r.GET("/stories", getStories)
+	// r.Run()
+	server := &http.Server{
+		Addr:    "",
+		Handler: r,
+	}
 	server.SetKeepAlivesEnabled(false)
 	server.ListenAndServe()
 }
@@ -122,6 +124,11 @@ type End struct {
 type Sentences struct {
 	Sentence string `json: "sentence"`
 }
+type Stories struct {
+	Key      string
+	Sentence string
+	Date     string
+}
 
 func postPlayks(c *gin.Context) {
 	key := c.Param("key")
@@ -133,8 +140,14 @@ func postPlayks(c *gin.Context) {
 		})
 		return
 	}
-	DB.Exec("INSERT INTO `doodlering`.`Play` (`Games_key`, `sequence`) " +
-		"VALUES ('" + key + "', '" + sequence + "');")
+	now := time.Now().Format("2006-01-02 15:04:05")
+	slice := strings.Split(now, " ")
+	_, err := DB.Exec("INSERT INTO `doodlering`.`Play` (`Games_key`, `sequence`, `gen_date`) " +
+		"VALUES ('" + key + "', '" + sequence + "', '" + slice[0] + "');")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	var id string
 	DB.QueryRow("SELECT id FROM doodlering.Play " +
 		"where Games_key = '" + key + "'AND sequence = '" + sequence + "';").Scan(&id)
@@ -273,4 +286,27 @@ func getEndks(c *gin.Context) {
 func getEndk(c *gin.Context) {
 	c.Header("Content-Type", "text/html")
 	c.HTML(http.StatusOK, "playing-end.html", gin.H{})
+}
+func getStories(c *gin.Context) {
+	query := "SELECT Games_key, p.gen_date, s.sentence as sentence FROM Play as p join Play_has_Sentences as ps on p.id = ps.Play_id join Sentences as s on ps.Sentences_id = s.id where sequence = 1;"
+	result, err := DB.Query(query)
+	if err != nil {
+		return
+	}
+	var stories []Stories
+	var key, sentence, date string
+
+	for result.Next() {
+		err = result.Scan(&key, &date, &sentence)
+		if err != nil {
+			fmt.Println(err)
+		}
+		tmp := Stories{
+			Key:      key,
+			Sentence: sentence,
+			Date:     date,
+		}
+		stories = append(stories, tmp)
+	}
+	c.JSON(200, stories)
 }
