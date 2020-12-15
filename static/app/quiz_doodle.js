@@ -80,7 +80,7 @@ $(function() {
       $('.sentence').html(data.Sentence);
     }
   }).fail(function (error) {
-      alert(error);
+      console.log(error);
   });
   $(".badge").attr("src","/static/img/badge/"+sequence+".svg");
 
@@ -102,7 +102,7 @@ $(function() {
       }
     }
   }).fail(function (error) {
-    alert(error);
+    console.log(error);
   });
 
   $('.bttn_off_next').click(function(){
