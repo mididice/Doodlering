@@ -3,7 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"sort"
 	"strings"
 	"time"
@@ -25,7 +27,8 @@ func main() {
 		fmt.Println("fail to open db")
 		return
 	}
-
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f)
 	// gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	// r := gin.Default()
