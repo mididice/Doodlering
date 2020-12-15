@@ -83,6 +83,7 @@ $(function() {
       console.log(error);
   });
   $(".badge").attr("src","/static/img/badge/"+sequence+".svg");
+  $('.bttn_off_back').attr("src", "/static/img/bttn_off_back/"+sequence+".svg");
 
   $.ajax({
     type: 'GET',
@@ -104,7 +105,14 @@ $(function() {
   }).fail(function (error) {
     console.log(error);
   });
-
+  $('.bttn_off_back').click(function(){
+    var sequence = getSequence();
+    if(sequence>1){
+      location.href="/story/"+key+"/"+(parseInt(sequence)-1);
+    }else{
+      location.href="/home";
+    }
+  });
   $('.bttn_off_next').click(function(){
     if(sequence>=10){
       location.href="/story/"+key+"/end"
