@@ -116,7 +116,7 @@ var threshold = function(pixels, level) {
 function draw() {
   strokeWeight(10);
   stroke(255);
-  if (mouseIsPressed) {
+  if (mouseIsPressed && !doGuess) {
     line(pmouseX, pmouseY, mouseX, mouseY);
     current_raw_line.push([pmouseX, pmouseY, mouseX, mouseY]);
     startDraw = true;

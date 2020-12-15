@@ -46,6 +46,7 @@ func main() {
 	r.GET("/tale/:key/:sequence", taleks)
 	r.GET("/play/:key/:sequence", getPlayks)
 	r.GET("/", redirectHome)
+	r.GET("/tales", getTales)
 	r.GET("/stories", getStories)
 	// r.Run()
 	server := &http.Server{
@@ -288,6 +289,10 @@ func getEndk(c *gin.Context) {
 	c.HTML(http.StatusOK, "playing-end.html", gin.H{})
 }
 func getStories(c *gin.Context) {
+	c.Header("Content-Type", "text/html")
+	c.HTML(http.StatusOK, "stories.html", gin.H{})
+}
+func getTales(c *gin.Context) {
 	query := "SELECT Games_key, gen_date, sentence " +
 		"FROM Play as p left join Play_has_Sentences as ps on p.id = ps.Play_id " +
 		"left join Sentences as s on ps.Sentences_id = s.id where sequence = 1;"
