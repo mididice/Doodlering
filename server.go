@@ -303,7 +303,7 @@ func getStories(c *gin.Context) {
 }
 func getTales(c *gin.Context) {
 	query := "SELECT Games_key, gen_date, sentence " +
-		"FROM Play as p left join Play_has_Sentences as ps on p.id = ps.Play_id " +
+		"FROM Play as p join Play_has_Sentences as ps on p.id = ps.Play_id " +
 		"left join Sentences as s on ps.Sentences_id = s.id where sequence = 1 order by gen_date desc limit 100;"
 	result, err := DB.Query(query)
 	if err != nil {
