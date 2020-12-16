@@ -3,9 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"io"
 	"net/http"
-	"os"
 	"sort"
 	"strings"
 	"time"
@@ -27,8 +25,8 @@ func main() {
 		fmt.Println("fail to open db")
 		return
 	}
-	f, _ := os.Create("gin.log")
-	gin.DefaultWriter = io.MultiWriter(f)
+	// f, _ := os.Create("gin.log")
+	// gin.DefaultWriter = io.MultiWriter(f)
 	// gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	// r := gin.Default()
@@ -51,6 +49,7 @@ func main() {
 	r.GET("/", redirectHome)
 	r.GET("/tales", getTales)
 	r.GET("/stories", getStories)
+	r.GET("/sentence/:key/:sequence", getSentence)
 	// r.Run()
 	server := &http.Server{
 		Addr:    "",
@@ -327,4 +326,21 @@ func getTales(c *gin.Context) {
 		stories = append(stories, tmp)
 	}
 	c.JSON(200, stories)
+}
+func getSentence(c *gin.Context) {
+	key := c.Param("key")
+	sequence := c.Param("sequence")
+	fmt.Println(key + ":" + sequence)
+	var playId, sentenceId, sentence string
+	query := "SELECT id FROM Play WHERE Games_key = '" + key + "' AND sequence = " + sequence + ";"
+	DB.QueryRow(query).Scan(&playId)
+
+	query = "SELECT Sentences_id FROM Play_has_Sentences WHERE Play_id = " +
+		playId + " AND Play_Games_key = '" + key + "';"
+	DB.QueryRow(query).Scan(&sentenceId)
+
+	query = "SELECT sentence FROM Sentences WHERE id = " + sentenceId + ";"
+	DB.QueryRow(query).Scan(&sentence)
+
+	c.JSON(200, Sentences{Sentence: sentence})
 }
