@@ -206,6 +206,7 @@ type Tale struct {
 
 func taleks(c *gin.Context) {
 	key := c.Param("key")
+	fmt.Println(key)
 	sequence := c.Param("sequence")
 	var id string
 	DB.QueryRow("SELECT id FROM doodlering.Play " +
