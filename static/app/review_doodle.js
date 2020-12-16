@@ -57,7 +57,7 @@ $(function () {
   var sequence = getSequence();
   $.ajax({
     type: 'GET',
-    url: '/play/'+key+'/'+sequence,
+    url: '/sentence/'+key+'/'+sequence,
     dataType: 'json'
   }).done(function(data) {
     if(data){
