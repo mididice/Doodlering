@@ -35,27 +35,30 @@
       margin-left: auto;
     }
 
-    .bttn_gamestart {
+    .div_bttn{
       position: absolute;
-      bottom: 0;
-      left: 15%;
-      margin-bottom: 40%;
+      bottom: 50px;
+      left: 40px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .bttn_gamestart {
+      width: 100%;
+      float: left;
+      margin-bottom: 2%;
     }
 
     .bttn_viewstories{
-      position: absolute;
-      bottom: 0;
-      left: 15%;
-      bottom: 0;
-      margin-bottom: 28%;
+      width: 100%;
+      float: left;
+     margin-bottom: 2%;
     }
 
     .bttn_howtoplay {
-      position: absolute;
-      bottom: 0;
-      left: 15%;
-      bottom: 0;
-      margin-bottom: 16%;
+      width: 100%;
+      float: left;
+     margin-bottom: 2%;
     }
 
     .background_image {
@@ -70,6 +73,7 @@
       <img src="/static/img/start_gametitle.png" alt="start game title" style="object-fit: cover;"
         class="background_image" loading="lazy" />
     </picture>
+    <div class="div_bttn">
     <picture>
       <img src="/static/img/bttn_gamestart.png" alt="game start" style="object-fit: cover;" class="bttn_gamestart"
         loading="lazy" />
@@ -86,6 +90,7 @@
           loading="lazy" />
       </a>
     </picture>
+    </div>
   </div>
   </div>
 </body>
