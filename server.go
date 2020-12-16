@@ -112,9 +112,8 @@ func getPlayingks(c *gin.Context) {
 	key := c.Param("key")
 	sequence := c.Param("sequence")
 	now := time.Now().Format("2006-01-02 15:04:05")
-	slice := strings.Split(now, " ")
 	_, err := DB.Exec("INSERT INTO `doodlering`.`Play` (`Games_key`, `sequence`, `gen_date`) " +
-		"VALUES ('" + key + "', '" + sequence + "', '" + slice[0] + "');")
+		"VALUES ('" + key + "', '" + sequence + "', '" + now + "');")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -306,7 +305,7 @@ func getStories(c *gin.Context) {
 func getTales(c *gin.Context) {
 	query := "SELECT Games_key, gen_date, sentence " +
 		"FROM Play as p left join Play_has_Sentences as ps on p.id = ps.Play_id " +
-		"left join Sentences as s on ps.Sentences_id = s.id where sequence = 1;"
+		"left join Sentences as s on ps.Sentences_id = s.id where sequence = 1 order by gen_date desc limit 100;"
 	result, err := DB.Query(query)
 	if err != nil {
 		return
@@ -316,13 +315,14 @@ func getTales(c *gin.Context) {
 
 	for result.Next() {
 		err = result.Scan(&key, &date, &sentence)
+		slice := strings.Split(date, " ")
 		if err != nil {
 			fmt.Println(err)
 		}
 		tmp := Stories{
 			Key:      key,
 			Sentence: sentence,
-			Date:     date,
+			Date:     slice[0],
 		}
 		stories = append(stories, tmp)
 	}
