@@ -109,6 +109,16 @@ func getStart(c *gin.Context) {
 	}
 }
 func getPlayingks(c *gin.Context) {
+	key := c.Param("key")
+	sequence := c.Param("sequence")
+	now := time.Now().Format("2006-01-02 15:04:05")
+	slice := strings.Split(now, " ")
+	_, err := DB.Exec("INSERT INTO `doodlering`.`Play` (`Games_key`, `sequence`, `gen_date`) " +
+		"VALUES ('" + key + "', '" + sequence + "', '" + slice[0] + "');")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	c.Header("Content-Type", "text/html")
 	c.HTML(http.StatusOK, "playing.html", gin.H{})
 }
@@ -144,14 +154,7 @@ func postPlayks(c *gin.Context) {
 		})
 		return
 	}
-	now := time.Now().Format("2006-01-02 15:04:05")
-	slice := strings.Split(now, " ")
-	_, err := DB.Exec("INSERT INTO `doodlering`.`Play` (`Games_key`, `sequence`, `gen_date`) " +
-		"VALUES ('" + key + "', '" + sequence + "', '" + slice[0] + "');")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+
 	var id string
 	DB.QueryRow("SELECT id FROM doodlering.Play " +
 		"where Games_key = '" + key + "'AND sequence = '" + sequence + "';").Scan(&id)
@@ -178,9 +181,14 @@ func getPlayks(c *gin.Context) {
 	err := DB.QueryRow(query).Scan(&sentenceId)
 	if err != nil {
 		//no data.
+		var playId string
 		DB.QueryRow("SELECT id, sentence FROM doodlering.Sentences ORDER BY RAND() LIMIT 1;").Scan(&sentenceId, &sentence)
+		query = "SELECT id FROM Play WHERE Games_key = '" + key + "' AND sequence = " + sequence + ";"
+		DB.QueryRow(query).Scan(&playId)
+		fmt.Println("you wn:")
+		fmt.Println(playId)
 		query = "INSERT INTO `doodlering`.`Play_has_Sentences` (`Play_id`, `Play_Games_key`, `Sentences_id`) " +
-			"VALUES (" + sequence + ", '" + key + "', " + sentenceId + ");"
+			"VALUES (" + playId + ", '" + key + "', " + sentenceId + ");"
 		DB.Exec(query)
 		c.JSON(200, Sentences{
 			Sentence: sentence,
