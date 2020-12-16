@@ -9,6 +9,8 @@ let doGuess = false;
 let current_raw_line = [];
 let prediction = [];
 
+let moveClicked = true;
+
 async function loadMyModel() {
   model = await tf.loadLayersModel('/model/model.json');
   model.summary();
@@ -133,11 +135,18 @@ function get_window_height() {
   return window.innerHeight;
 }
 $('.bttn_off_back').click(function(){
-  var sequence = getSequence();
-  if(sequence>1){
-    location.href="/playing/"+key+"/"+(parseInt(sequence)-1);
-  }else{
-    location.href="/home";
+  if(moveClicked){
+    moveClicked = !moveClicked;
+    var key = getKey();
+    var sequence = getSequence();
+    if(sequence>1){
+      location.href="/playing/"+key+"/"+(parseInt(sequence)-1);
+    }else{
+      location.href="/home";
+    }
+    setTimeout(function () {
+      moveClicked = true;
+    }, 2000)
   }
 });
 $('.bttn_off_next').click(function(){
@@ -153,22 +162,29 @@ $('.bttn_off_next').click(function(){
   if(prediction.length<1){
     return;
   }
-  $(this).attr('disabled', true);
-  $.ajax({
-    type: 'POST',
-    url: '/play/'+key+'/'+sequence,
-    dataType: 'text',
-    contentType:'application/json; charset=utf-8',
-    data: JSON.stringify(data)
-  }).done(function(data) {
-    if(sequence>=10){
-      location.href="/ending/"+key
-    }else{
-      location.href="/playing/"+key+"/"+(parseInt(sequence)+1);
-    }
-  }).fail(function (error) {
-    console.log(error);
-  });
+  if(moveClicked){
+    moveClicked = !moveClicked;
+   
+    $.ajax({
+      type: 'POST',
+      url: '/play/'+key+'/'+sequence,
+      dataType: 'text',
+      contentType:'application/json; charset=utf-8',
+      data: JSON.stringify(data)
+    }).done(function(data) {
+      if(sequence>=10){
+        location.href="/ending/"+key
+      }else{
+        location.href="/playing/"+key+"/"+(parseInt(sequence)+1);
+      }
+    }).fail(function (error) {
+      console.log(error);
+    });
+
+    setTimeout(function () {
+      moveClicked = true;
+    }, 3000)
+  }
 });
 $('.bttn_guess').click(function(){
   if(startDraw){

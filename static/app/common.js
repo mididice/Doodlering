@@ -42,7 +42,7 @@ $(function () {
                 location.href = "/playing/" + data.key + "/1";
             }
         }).fail(function (error) {
-            alert(error);
+            alert("담당자에게 이야기해주세요.");
         });
     });
     $('.bttn_gamestart_howto').click(function () {
@@ -55,7 +55,7 @@ $(function () {
                 location.href = "/playing/" + data.key + "/1";
             }
         }).fail(function (error) {
-            alert(error);
+            alert("담당자에게 이야기해주세요.");
         });
     });
     $('.ending_first').click(function(){

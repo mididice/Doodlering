@@ -17,6 +17,7 @@ let confidence;
 let startingStrokes = [];
 
 let startingStrokeIndex = 0;
+let moveClicked = true;
 
 function setup() {
   // Create a canvas with 280 x 280 px
@@ -106,18 +107,29 @@ $(function() {
     console.log(error);
   });
   $('.bttn_off_back').click(function(){
-    var sequence = getSequence();
-    if(sequence>1){
-      location.href="/story/"+key+"/"+(parseInt(sequence)-1);
-    }else{
-      location.href="/home";
+    if(moveClicked){
+      moveClicked = !moveClicked;
+      if(sequence>1){
+        location.href="/story/"+key+"/"+(parseInt(sequence)-1);
+      }else{
+        location.href="/home";
+      }
+      setTimeout(function () {
+        moveClicked = true;
+      }, 2000)
     }
   });
   $('.bttn_off_next').click(function(){
-    if(sequence>=10){
-      location.href="/story/"+key+"/end"
-    }else{
-      location.href="/story/"+key+"/"+(parseInt(sequence)+1);
+    if(moveClicked){
+      moveClicked = !moveClicked;
+      if(sequence>=10){
+        location.href="/story/"+key+"/end"
+      }else{
+        location.href="/story/"+key+"/"+(parseInt(sequence)+1);
+      }
+      setTimeout(function () {
+        moveClicked = true;
+      }, 2000)
     }
   });
 
