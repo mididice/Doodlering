@@ -52,7 +52,7 @@ func main() {
 	r.GET("/sentence/:key/:sequence", getSentence)
 	// r.Run()
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    "",
 		Handler: r,
 	}
 	server.SetKeepAlivesEnabled(false)
