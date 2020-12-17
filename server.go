@@ -3,9 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"io"
 	"net/http"
-	"os"
 	"sort"
 	"strings"
 	"time"
@@ -27,8 +25,8 @@ func main() {
 		fmt.Println("fail to open db")
 		return
 	}
-	f, _ := os.Create("gin.log")
-	gin.DefaultWriter = io.MultiWriter(f)
+	// f, _ := os.Create("gin.log")
+	// gin.DefaultWriter = io.MultiWriter(f)
 	// gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	// r := gin.Default()
@@ -51,6 +49,7 @@ func main() {
 	r.GET("/", redirectHome)
 	r.GET("/tales", getTales)
 	r.GET("/stories", getStories)
+	r.GET("/sentence/:key/:sequence", getSentence)
 	// r.Run()
 	server := &http.Server{
 		Addr:    "",
@@ -172,14 +171,16 @@ func postPlayks(c *gin.Context) {
 
 func getPlayks(c *gin.Context) {
 	var sentence string
-	var sentenceId string
+	var sentenceId, playId string
 	key := c.Param("key")
 	sequence := c.Param("sequence")
-	query := "SELECT Sentences_id FROM doodlering.Play_has_Sentences where Play_id = '" +
-		sequence + "' AND Play_Games_key = '" + key + "';"
+	query := "SELECT id FROM Play WHERE Games_key = '" + key + "' AND sequence = " + sequence + ";"
+	DB.QueryRow(query).Scan(&playId)
+	query = "SELECT Sentences_id FROM doodlering.Play_has_Sentences where Play_id = '" +
+		playId + "' AND Play_Games_key = '" + key + "';"
 	err := DB.QueryRow(query).Scan(&sentenceId)
-	if err != nil {
-		//no data.
+	if err == sql.ErrNoRows {
+		fmt.Println("no data")
 		var playId string
 		DB.QueryRow("SELECT id, sentence FROM doodlering.Sentences ORDER BY RAND() LIMIT 1;").Scan(&sentenceId, &sentence)
 		query = "SELECT id FROM Play WHERE Games_key = '" + key + "' AND sequence = " + sequence + ";"
@@ -207,6 +208,7 @@ type Tale struct {
 
 func taleks(c *gin.Context) {
 	key := c.Param("key")
+	fmt.Println(key)
 	sequence := c.Param("sequence")
 	var id string
 	DB.QueryRow("SELECT id FROM doodlering.Play " +
@@ -303,11 +305,14 @@ func getStories(c *gin.Context) {
 	c.HTML(http.StatusOK, "stories.html", gin.H{})
 }
 func getTales(c *gin.Context) {
-	query := "SELECT Games_key, gen_date, sentence " +
-		"FROM Play as p left join Play_has_Sentences as ps on p.id = ps.Play_id " +
-		"left join Sentences as s on ps.Sentences_id = s.id where sequence = 1 order by gen_date desc limit 100;"
+	query := "SELECT Games_key, gen_date, sentence FROM Play as p left join Play_has_Sentences as ps on p.id = ps.Play_id left join Sentences as s on ps.Sentences_id = s.id where sequence = 1 order by gen_date desc limit 100;"
+	//	"SELECT Games_key, gen_date, sentence FROM Play as p " +
+	//	"INNER JOIN Play_has_Sentences as ps ON p.id = ps.Play_id " +
+	//	"LEFT JOIN Sentences as s ON ps.Sentences_id = s.id " +
+	//	"GROUP BY p.Games_key HAVING count(p.Games_key) > 9 ORDER BY gen_date DESC LIMIT 100;"
 	result, err := DB.Query(query)
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 	var stories []Stories
@@ -327,4 +332,21 @@ func getTales(c *gin.Context) {
 		stories = append(stories, tmp)
 	}
 	c.JSON(200, stories)
+}
+func getSentence(c *gin.Context) {
+	key := c.Param("key")
+	sequence := c.Param("sequence")
+	fmt.Println(key + ":" + sequence)
+	var playId, sentenceId, sentence string
+	query := "SELECT id FROM Play WHERE Games_key = '" + key + "' AND sequence = " + sequence + ";"
+	DB.QueryRow(query).Scan(&playId)
+
+	query = "SELECT Sentences_id FROM Play_has_Sentences WHERE Play_id = " +
+		playId + " AND Play_Games_key = '" + key + "';"
+	DB.QueryRow(query).Scan(&sentenceId)
+
+	query = "SELECT sentence FROM Sentences WHERE id = " + sentenceId + ";"
+	DB.QueryRow(query).Scan(&sentence)
+
+	c.JSON(200, Sentences{Sentence: sentence})
 }
