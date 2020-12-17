@@ -303,12 +303,14 @@ func getStories(c *gin.Context) {
 	c.HTML(http.StatusOK, "stories.html", gin.H{})
 }
 func getTales(c *gin.Context) {
-	query := "SELECT Games_key, gen_date, sentence FROM Play as p " +
-		"INNER JOIN Play_has_Sentences as ps ON p.id = ps.Play_id " +
-		"LEFT JOIN Sentences as s ON ps.Sentences_id = s.id " +
-		"GROUP BY p.Games_key HAVING count(p.Games_key) > 9 ORDER BY gen_date DESC LIMIT 100;"
+	query := "SELECT Games_key, gen_date, sentence FROM Play as p left join Play_has_Sentences as ps on p.id = ps.Play_id left join Sentences as s on ps.Sentences_id = s.id where sequence = 1 order by gen_date desc limit 100;" 
+	//	"SELECT Games_key, gen_date, sentence FROM Play as p " +
+	//	"INNER JOIN Play_has_Sentences as ps ON p.id = ps.Play_id " +
+	//	"LEFT JOIN Sentences as s ON ps.Sentences_id = s.id " +
+	//	"GROUP BY p.Games_key HAVING count(p.Games_key) > 9 ORDER BY gen_date DESC LIMIT 100;"
 	result, err := DB.Query(query)
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 	var stories []Stories
