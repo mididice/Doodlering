@@ -22,8 +22,8 @@ function setup() {
   cnv = createCanvas(280, 280);
   background('#3644eb');
 
-  // cnv.mouseReleased(guess);
-  cnv.touchEnded(guess);
+  cnv.mouseReleased(touched);
+  cnv.touchEnded(touched);
   cnv.parent('drawingPaper');
 
   let clearButton = select('.bttn_redraw');
@@ -37,7 +37,11 @@ function setup() {
     $('.bttn_guess').attr("src", "/static/img/bttn_guess_yet.png")
     startDraw = false;
     doGuess = false;
+    loop();
   });
+}
+function touched(){
+  $('.bttn_guess').attr("src", "/static/img/bttn_guess.png");
 }
 
 function guess() {
@@ -65,7 +69,7 @@ function guess() {
   top5ClassWIndex.map(i=> results.push({['label']: hanguel.get(CLASSES[i.index]) , ['confidence']: i.probability}));
   prediction = results;
   select('#word').html(results[0].label);
-  $('.bttn_guess').attr("src", "/static/img/bttn_guess.png");
+  noLoop();
 }
 
 function getInputImage() {

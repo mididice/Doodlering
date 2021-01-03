@@ -9,154 +9,18 @@
   <meta name="description" content="make setence with doodling">
   <meta name="keywords" content="midiDice sketch-rnn 두들링 아트센터나비">
   <meta name="author" content="midiDice">
+  <meta property="og:title" content="두들링">
+  <meta property="og:description" content="두들링 with midiDICE">
 
   <title>doodlering</title>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
   <script src="/static/lib/jquery.min.js"></script>
-  <style>
-    html,
-    body {
-      width: 100vw;
-      height: auto !important;
-      min-height: 100vh;
-      background-color: #2a2c2e;
-      margin: 0;
-      overflow: hidden;
-    }
-
-    .container {
-      width: 100%;
-      padding-right: 0px;
-      padding-left: 0px;
-      margin-right: auto;
-      margin-left: auto;
-    }
-
-    .background_image {
-      position: relative;
-    }
-
-    .bttn_gamestart_howto {
-      position: absolute;
-      bottom: 13.5%;
-      left: 10%;
-    }
-
-    .ui_popup {
-      position: absolute;
-      left: 10%;
-      top: 2%;
-    }
-
-    .ui_result_start {
-      position: absolute;
-      left: 10%;
-      top: 2%;
-      border-radius: 5%;
-    }
-
-    .rectangle_main {
-      width: 83%;
-      height: 72vh;
-      border-radius: 20px;
-      box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-      border: solid 4px #cfd2d6;
-      background-color: #111111;
-      position: absolute;
-      top: 7%;
-      left: 8%;
-    }
-
-    .real_ending_title {
-      padding: 10%;
-      width: 232px;
-      opacity: 0.9;
-      font-family: NanumSquareOTF;
-      font-size: 20px;
-      font-weight: 300;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: -0.8px;
-      text-align: left;
-      color: #ffffff;
-    }
-
-    .real_ending_title_emphasis {
-      font-weight: 800;
-    }
-
-    .ui_url {
-      object-fit: cover;
-      border-radius: 11%;
-      left: 13%;
-      top: 34%;
-      position: absolute;
-    }
-
-    .real_ending_center {
-      position: absolute;
-      top: 42%;
-      width: 66%;
-      left: 17%;
-      font-family: NanumSquareOTF;
-      font-size: 14px;
-      font-weight: 800;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: -0.56px;
-      text-align: center;
-      color: #ffffff;
-    }
-
-    .real_ending_center>a {
-      font-size: 12px;
-      font-weight: 300;
-      letter-spacing: -0.48px;
-    }
-
-    .real_ending_center>a:link {
-      color: #ffffff;
-    }
-
-    .bttn_copy {
-      position: absolute;
-      top: 57%;
-      left: 39%;
-    }
-
-    .real_ending_share {
-      display: none;
-      text-align: center;
-    }
-
-    .real_ending_share_btn {
-      margin-left: 1%;
-    }
-
-    .bttn_retry {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      border-radius: 0 0 16px 16px;
-    }
-
-    .ui_bottom {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 14%;
-      border-radius: 8% 9% 0 0;
-      background-color: #000000;
-    }
-  </style>
+  <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 
 <body>
   <div id="fb-root"></div>
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v9.0"
-    nonce="afhlg77x"></script>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v9.0&appId=180351355946189&autoLogAppEvents=1" nonce="1umylIyd"></script>
   <div class="container">
     <picture>
       <img src="/static/img/ui_bg.png" alt="background image" style="object-fit: cover;" class="background_image"
@@ -191,13 +55,10 @@
         <a id="create-kakao-link-btn" class="real_ending_share_btn" href="javascript:;">
           <img src="/static/img/social_kakao.svg" />
         </a>
-        <a class="real_ending_share_btn" target="_blank"
-          href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:8080/&amp;src=sdkpreparse"
-          class="fb-xfbml-parse-ignore">
+        <a class="real_ending_share_btn" target="_blank" onclick="shareFacebook()">
           <img src="/static/img/social_facebook.svg" />
         </a>
-        <a class="real_ending_share_btn"
-          href="https://twitter.com/intent/tweet?text=doodlering&url=http://localhost:8080" target="_blank">
+        <a class="real_ending_share_btn" target="_blank" onclick="shareTwitter()">
           <img src="/static/img/social_twitter.svg" />
         </a>
       </div>
@@ -221,9 +82,15 @@
   Kakao.init("cf67686fdea922cf740c5d71821bd9a1")
   Kakao.Link.createScrapButton({
     container: '#create-kakao-link-btn',
-    requestUrl: 'http://localhost:8080/ending/'+getKey(),
+    requestUrl: getShareLink(),
   })
-</script>
-</script>
 
+    function shareFacebook() {
+      window.open('http://www.facebook.com/sharer.php?u='+getShareLink());
+    }
+
+    function shareTwitter(){
+      window.open('https://twitter.com/intent/tweet?text=doodlering&url='+getShareLink());
+    }
+</script>
 </html>
