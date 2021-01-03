@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"Doodlering/config"
 	"database/sql"
 	"fmt"
 	"net/http"
@@ -16,7 +17,12 @@ var DB *sql.DB
 
 func InitDB() error {
 	var err error
-	DB, err = sql.Open("mysql", "root:1q2w3e4r5T!@@tcp(localhost:3306)/doodlering")
+	dbConnectInfo := fmt.Sprintf("%s:%s@tcp(%s)/%s",
+		config.DBEnv.User,
+		config.DBEnv.Password,
+		config.DBEnv.Host,
+		config.DBEnv.Name)
+	DB, err = sql.Open("mysql", dbConnectInfo)
 	if err != nil {
 		return err
 	}

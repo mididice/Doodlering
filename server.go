@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Doodlering/config"
 	"Doodlering/controllers"
 	"Doodlering/routers"
 	"fmt"
@@ -11,8 +12,13 @@ import (
 
 func main() {
 	fmt.Println("start!")
-	err := controllers.InitDB()
+	err := config.SetupEnv()
+	if err != nil {
+		fmt.Println("fail to parse")
+		return
+	}
 
+	err = controllers.InitDB()
 	if err != nil {
 		fmt.Println("fail to open db")
 		return
