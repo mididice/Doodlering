@@ -7,7 +7,7 @@ var getKey = function () {
 var getSequence = function () {
     var pathName = window.location.pathname;
     var pathNameList = pathName.split("/");
-    return pathNameList[2];
+    return pathNameList[3];
 }
 var getShareLink = function(){
     var pathName = window.location.pathname;

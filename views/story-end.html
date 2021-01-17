@@ -8,6 +8,10 @@
   <meta name="description" content="make setence with doodling">
   <meta name="keywords" content="midiDice sketch-rnn 두들링 아트센터나비">
   <meta name="author" content="midiDice">
+  <meta property="og:type"          content="website" />
+  <meta property="og:title"         content="Doodlering" />
+  <meta property="og:description"   content="그림책을 완성해보세요." />
+  <meta property="og:image"         content="http://doodlering.mididice.works/static/img/start_gametitle.png" />
 
   <title>doodlering</title>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
@@ -17,9 +21,6 @@
 </head>
 
 <body>
-  <div id="fb-root"></div>
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v9.0&appId=180351355946189&autoLogAppEvents=1" nonce="1umylIyd"></script>
-
   <div class="container">
     <picture>
       <img src="/static/img/ui_bg.png" alt="background image" style="object-fit: cover;" class="background_image"
@@ -79,11 +80,12 @@
 <script src="/static/app/common.js"></script>
 <script src="/static/lib/kakao.min.js"></script>
 <script type="text/javascript">
-   Kakao.init("cf67686fdea922cf740c5d71821bd9a1")
-  Kakao.Link.createScrapButton({
-    container: '#create-kakao-link-btn',
-    requestUrl: getShareLink(),
-  })
+    Kakao.init("cf67686fdea922cf740c5d71821bd9a1")
+    Kakao.Link.createCustomButton({
+      container: '#create-kakao-link-btn',
+      templateId: 41441,
+      templateArgs: {'key':getKey(), 'seq':1}
+    })
 
     function shareFacebook() {
       window.open('http://www.facebook.com/sharer.php?u='+getShareLink());
