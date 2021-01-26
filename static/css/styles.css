@@ -61,9 +61,14 @@ body {
   position: absolute;
   top: 14%;
   margin-left: 50px;
-  overflow: hidden;
+  overflow: auto;
   height: 600px;
   max-width: 410px;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.stories::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
 }
 
 .story_box {
@@ -123,9 +128,9 @@ body {
   left: 15%;
 }
 .bttn_close{
-  position: absolute;
-  top: 7%;
-  left: 60%;
+  position: fixed;
+  top: 8%;
+  left: 55%;
 }
 .howto_div{
   position: absolute;
